@@ -124,6 +124,51 @@ select:focus,input:focus{border-color:var(--accent);}
 </style>
 </head>
 <body>
+<style>
+#pw-gate{position:fixed;inset:0;background:#f8f8f5;z-index:99999;display:flex;align-items:center;justify-content:center;}
+#pw-box{background:#fff;border:1px solid #e2e2de;border-radius:12px;padding:40px 48px;text-align:center;max-width:360px;width:90%;box-shadow:0 4px 24px rgba(0,0,0,.08);}
+#pw-logo{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:600;color:#1a1a1a;margin-bottom:6px;}
+#pw-sub{font-size:12px;color:#6b6b6b;margin-bottom:28px;text-transform:uppercase;letter-spacing:0.08em;}
+#pw-input{width:100%;border:1px solid #e2e2de;border-radius:6px;padding:10px 14px;font-size:14px;font-family:'Source Sans 3',sans-serif;outline:none;text-align:center;letter-spacing:0.05em;transition:border-color .15s;box-sizing:border-box;}
+#pw-input:focus{border-color:#326891;}
+#pw-error{color:#c0392b;font-size:12px;margin-top:10px;min-height:18px;}
+#pw-btn{margin-top:16px;width:100%;background:#326891;color:#fff;border:none;border-radius:6px;padding:10px;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;}
+#pw-btn:hover{background:#255070;}
+</style>
+<div id="pw-gate">
+  <div id="pw-box">
+    <div id="pw-logo">Forecast 2026</div>
+    <input id="pw-input" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')checkPW()">
+    <div id="pw-error"></div>
+    <button id="pw-btn" onclick="checkPW()">Enter</button>
+  </div>
+</div>
+<script>
+(function(){
+  const HASH = '4cc19ae6f1def39430501960a0f01ec7c215c6c8718d1381a24f97f1965d3559';
+  async function sha256(str){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  // Check if already authenticated in session
+  if(sessionStorage.getItem('fc_auth')==='1'){
+    document.getElementById('pw-gate').style.display='none';
+    return;
+  }
+  window.checkPW = async function(){
+    const val = document.getElementById('pw-input').value;
+    const h = await sha256(val);
+    if(h === HASH){
+      sessionStorage.setItem('fc_auth','1');
+      document.getElementById('pw-gate').style.display='none';
+    } else {
+      document.getElementById('pw-error').textContent='Incorrect password';
+      document.getElementById('pw-input').value='';
+      document.getElementById('pw-input').focus();
+    }
+  };
+})();
+</script>
 <header>
   <div class="logo" style="display:flex;align-items:center;gap:8px"><img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE1NDggMjI0NyIgd2lkdGg9IjE1NDgiIGhlaWdodD0iMjI0NyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJQIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIvPjxsaW5lYXJHcmFkaWVudCBpZD0iZzEiIHgyPSIxIiBocmVmPSIjUCIgZ3JhZGllbnRUcmFuc2Zvcm09Im1hdHJpeCgwLDIyNDMuMDQ3LC0zODguMjg4LDAsMTk0LjM3LC40OTMpIj48c3RvcCBzdG9wLWNvbG9yPSIjMjVjNmZmIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMmVkMGZmIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHN0eWxlPi5he2ZpbGw6I2ZjOTkwZn0uYntmaWxsOnVybCgjZzEpfS5je2ZpbGw6I2RhMDEyN308L3N0eWxlPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xhc3M9ImEiIGQ9Im0xNDU4LjEgNjU1Yy03Mi0xNi4zLTE3NS4zLTIzLjQtMjM3LjYtMjMuNC01OC41IDAtMTI3LjMgMC0xOTUuNSAxMC40LTE0OS4zIDI2Mi45LTM1My45IDQ3Ny45LTU5Mi45IDYzNi45djQwMy45YzI5LjktMTcuNiA2MC40LTM1LjcgOTAuMy01My45bDAuNiAwLjZjNTUuOS0zNC40IDE4My4yLTExNi44IDMzMy44LTI0Mi4xIDIxOS41LTE4OC4zIDQyNi00MzIuNSA2MDEuMy03MzIuNHoiLz48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJiIiBkPSJtMzg4LjYgMTMwNi44di0xMjg5LjRjLTY0LjktMTAuNC0xMzAuNS0xNi45LTE5Ni4xLTE2LjktNjQuOSAwLTEyNy4zIDYuNS0xOTIuMiAxNi45djIyMDkuNWM2OC44IDEzLjYgMTMzLjggMTYuOSAxOTYuMSAxNi45IDY0LjkgMCAxMzAuNS0zLjMgMTkyLjItMTYuOXoiLz48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJjIiBkPSJtODYwLjEgMTQ0NS44Yy01OS44IDQ5LjMtMjA5LjEgMTY5LjUtMzA1LjkgMjE4LjFsNTE1IDU3Mi43YzU4LjQgNy4yIDE0OCAxMC40IDE5Ni4xIDEwLjQgMTA3LjEgMCAyMjMuNC0xNi45IDI4MS44LTMwLjUgMCAwLTY4Ny03NzEuNC02ODctNzcwLjd6Ii8+PC9zdmc+" alt="Keyrus" style="height:28px;flex-shrink:0">Forecast <span>2026 · EUR</span></div>
   <nav>
