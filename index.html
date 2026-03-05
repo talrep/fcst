@@ -1,0 +1,2250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financial Forecast 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
+:root {
+  --bg:#f5f0e8;--surface:#fffefb;--surface2:#ede8df;--border:#d9d2c5;
+  --accent:#c96442;--red:#c0392b;--yellow:#c96442;--blue:#2d6a9f;
+  --text:#1a1a1a;--muted:#7a7060;
+  --pos-color:#2d6a4f;--neg-color:#c0392b;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{overflow-x:auto;}
+body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;left:0;z-index:200;box-shadow:0 2px 8px rgba(45,106,159,.06);min-width:900px;}
+.logo{font-family:'DM Serif Display',serif;font-size:20px;color:var(--accent);}
+.logo span{color:var(--muted);font-size:12px;font-family:'DM Mono',monospace;margin-left:10px;}
+nav{display:flex;gap:4px;}
+nav button{background:none;border:1px solid transparent;color:var(--muted);padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;transition:all .15s;}
+nav button:hover{color:var(--text);border-color:var(--border);}
+nav button.active{background:rgba(45,106,159,.08);color:var(--accent);border-color:var(--accent);}
+.btn-import{background:rgba(96,165,250,.1);border:1px solid var(--blue)!important;color:var(--blue)!important;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;transition:all .15s;}
+.btn-import:hover{background:rgba(96,165,250,.2)!important;}
+.main{padding:20px 24px;max-width:1700px;margin:0 auto;min-width:900px;}
+.section{display:none;}.section.active{display:block;}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kpi.g::before{background:#0a7a4b;}.kpi.r::before{background:var(--red);}
+.kpi.y::before{background:var(--yellow);}.kpi.b::before{background:var(--blue);}
+.kpi-label{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+.kpi-value{font-family:'DM Serif Display',serif;font-size:18px;}
+.kpi-value.g{color:var(--accent);}.kpi-value.r{color:var(--red);}
+.kpi-value.y{color:var(--yellow);}.kpi-value.b{color:var(--blue);}
+.kpi-sub{color:var(--muted);font-size:9px;margin-top:2px;}
+.chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;}
+.card-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+canvas{max-height:260px;}
+.table-wrap{max-width:100%;}
+th.sortable:hover{background:var(--surface2);color:var(--text);}
+th.sort-active{color:var(--accent)!important;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{text-align:left;padding:7px 10px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:7px 10px;border-bottom:1px solid rgba(42,47,58,.4);white-space:nowrap;}
+tr:hover td{background:var(--surface2);}
+td.num{text-align:right;font-variant-numeric:tabular-nums;}
+.pos{color:var(--accent);}.neg{color:var(--red);}.neu{color:var(--muted);}
+.filters{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+select,input[type=text],input[type=number]{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color .15s;}
+select:focus,input:focus{border-color:var(--accent);}
+.btn{border-radius:6px;padding:6px 14px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;border:1px solid;transition:all .15s;}
+.btn-green{background:rgba(79,255,176,.1);border-color:var(--accent);color:var(--accent);}
+.btn-green:hover{background:rgba(79,255,176,.2);}
+.btn-red{background:rgba(255,107,107,.1);border-color:var(--red);color:var(--red);}
+.btn-red:hover{background:rgba(255,107,107,.2);}
+.btn-blue{background:rgba(96,165,250,.1);border-color:var(--blue);color:var(--blue);}
+.btn-blue:hover{background:rgba(96,165,250,.2);}
+.btn-muted{background:var(--surface2);border-color:var(--border);color:var(--muted);}
+.btn-muted:hover{color:var(--text);}
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;}
+.badge-green{background:rgba(79,255,176,.1);color:var(--accent);}
+.badge-blue{background:rgba(96,165,250,.1);color:var(--blue);}
+.badge-yellow{background:rgba(255,209,102,.15);color:#b07d00;}
+.badge-orange{background:rgba(201,100,66,.12);color:var(--red);}
+.badge-muted{background:rgba(180,170,160,.12);color:var(--muted);}
+.year-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;margin-bottom:20px;}
+.mc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center;cursor:pointer;transition:all .15s;}
+.mc:hover,.mc.sel{border-color:var(--accent);background:rgba(79,255,176,.04);}
+.mc-name{font-size:9px;color:var(--muted);margin-bottom:3px;}
+.mc-val{font-size:13px;font-weight:500;}
+.mc-sub{font-size:9px;color:var(--muted);margin-top:2px;}
+.fx-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px;}
+.fx-table th{text-align:center;padding:7px 6px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--border);white-space:nowrap;}
+.fx-table th.fx-cur-col{text-align:left;width:80px;}
+.fx-table td{padding:4px 4px;border-bottom:1px solid rgba(42,47,58,.3);}
+.fx-table tr:hover td{background:var(--surface2);}
+.fx-table td.fx-cur-cell{color:var(--accent);font-size:11px;white-space:nowrap;padding-left:6px;}
+.fx-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:4px 6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;text-align:right;outline:none;transition:border-color .15s;box-sizing:border-box;-moz-appearance:textfield;}
+.fx-input:focus{border-color:var(--accent);}
+.fx-input::-webkit-outer-spin-button,.fx-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;width:800px;max-width:96vw;max-height:92vh;overflow-y:auto;}
+.modal-title{font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:20px;color:var(--accent);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg.full{grid-column:1/-1;}
+.fl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;}
+.fi{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color .15s;}
+.fi:focus{border-color:var(--accent);}
+.type-toggle{display:flex;gap:4px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px;}
+.type-toggle button{flex:1;background:none;border:none;color:var(--muted);padding:5px;border-radius:4px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;transition:all .15s;}
+.type-toggle button.active{background:var(--surface);color:var(--accent);}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
+.days-section{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+.days-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;}
+.days-sub{font-size:10px;color:var(--muted);margin-bottom:8px;}
+.days-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.dg{display:flex;flex-direction:column;gap:3px;}
+.dl{font-size:9px;color:var(--muted);text-align:center;}
+.di{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:5px 3px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;text-align:center;outline:none;width:100%;}
+.di:focus{border-color:var(--accent);}
+.di.r{border-color:rgba(255,209,102,.25);}
+.view-toggle{display:flex;gap:3px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:2px;}
+.view-toggle button{background:none;border:none;color:var(--muted);padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;transition:all .15s;}
+.view-toggle button.active{background:var(--surface);color:var(--accent);}
+.month-strip{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:18px;}
+.ms-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:5px 10px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;transition:all .15s;white-space:nowrap;}
+.ms-btn:hover{color:var(--text);border-color:var(--text);}
+.ms-btn.active{background:rgba(45,106,159,.08);color:var(--accent);border-color:var(--accent);}
+.ms-btn.all{color:var(--accent);border-color:var(--accent);}
+.ms-btn.all.active{background:rgba(45,106,159,.1);}
+.mbar{display:flex;align-items:center;gap:6px;}
+.bar-track{flex:1;height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:2px;}
+.info-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:11px;color:var(--muted);line-height:1.7;}
+.info-box strong{color:var(--text);}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" style="display:flex;align-items:center;gap:8px"><img src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDE1NDggMjI0NyIgd2lkdGg9IjE1NDgiIGhlaWdodD0iMjI0NyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJQIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIvPjxsaW5lYXJHcmFkaWVudCBpZD0iZzEiIHgyPSIxIiBocmVmPSIjUCIgZ3JhZGllbnRUcmFuc2Zvcm09Im1hdHJpeCgwLDIyNDMuMDQ3LC0zODguMjg4LDAsMTk0LjM3LC40OTMpIj48c3RvcCBzdG9wLWNvbG9yPSIjMjVjNmZmIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMmVkMGZmIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHN0eWxlPi5he2ZpbGw6I2ZjOTkwZn0uYntmaWxsOnVybCgjZzEpfS5je2ZpbGw6I2RhMDEyN308L3N0eWxlPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xhc3M9ImEiIGQ9Im0xNDU4LjEgNjU1Yy03Mi0xNi4zLTE3NS4zLTIzLjQtMjM3LjYtMjMuNC01OC41IDAtMTI3LjMgMC0xOTUuNSAxMC40LTE0OS4zIDI2Mi45LTM1My45IDQ3Ny45LTU5Mi45IDYzNi45djQwMy45YzI5LjktMTcuNiA2MC40LTM1LjcgOTAuMy01My45bDAuNiAwLjZjNTUuOS0zNC40IDE4My4yLTExNi44IDMzMy44LTI0Mi4xIDIxOS41LTE4OC4zIDQyNi00MzIuNSA2MDEuMy03MzIuNHoiLz48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJiIiBkPSJtMzg4LjYgMTMwNi44di0xMjg5LjRjLTY0LjktMTAuNC0xMzAuNS0xNi45LTE5Ni4xLTE2LjktNjQuOSAwLTEyNy4zIDYuNS0xOTIuMiAxNi45djIyMDkuNWM2OC44IDEzLjYgMTMzLjggMTYuOSAxOTYuMSAxNi45IDY0LjkgMCAxMzAuNS0zLjMgMTkyLjItMTYuOXoiLz48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsYXNzPSJjIiBkPSJtODYwLjEgMTQ0NS44Yy01OS44IDQ5LjMtMjA5LjEgMTY5LjUtMzA1LjkgMjE4LjFsNTE1IDU3Mi43YzU4LjQgNy4yIDE0OCAxMC40IDE5Ni4xIDEwLjQgMTA3LjEgMCAyMjMuNC0xNi45IDI4MS44LTMwLjUgMCAwLTY4Ny03NzEuNC02ODctNzcwLjd6Ii8+PC9zdmc+" alt="Keyrus" style="height:28px;flex-shrink:0">Forecast <span>2026 · EUR</span></div>
+  <nav>
+    
+    <button class="active" onclick="showSection('dashboard',this)">Dashboard</button>
+    <button onclick="showSection('detail',this)">Teams</button>
+    <button onclick="showSection('fx',this)">Exchanges</button>
+    <button onclick="showSection('invoice',this)">Invoices</button>
+    <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+      <button onclick="exportToExcel()" style="background:rgba(79,255,176,.15);color:var(--accent);border:1px solid rgba(79,255,176,.3);padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px" title="Export all tabs to Excel">⬇ Export</button>
+      <button class="btn-import" onclick="document.getElementById('xl-input').click()" title="Import Excel">⬆ Import</button>
+      <input type="file" id="xl-input" accept=".xlsx,.xls" style="display:none" onchange="importExcel(event)">
+    </div>
+  </nav>
+</header>
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div id="section-dashboard" class="section active">
+
+    <!-- Month strip -->
+    <div class="month-strip" id="dash-month-strip" style="margin-bottom:16px"></div>
+
+    <!-- ── REVENUE KPIs ── -->
+    <div id="kpi-grid" class="kpi-grid"></div>
+
+    <!-- ── BACKLOG KPIs ── -->
+    <div id="backlog-kpis" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px"></div>
+
+    <!-- ── YEAR GRID ── -->
+    <div class="year-grid" id="year-grid" style="margin-bottom:20px"></div>
+
+    <!-- ── CLIENT TABLE ── -->
+    <div style="margin-bottom:20px">
+      <div class="card">
+        <div class="card-title">Revenue by Client</div>
+        <div class="table-wrap"><table id="client-table"></table></div>
+      </div>
+    </div>
+
+    <!-- ── INDUSTRY / REGION / DOMAIN / CATEGORY / CONTRACT TYPE ── -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="card">
+          <div class="card-title" id="title-industry">Revenue by Industry</div>
+          <div class="table-wrap"><table id="industry-table"></table></div>
+        </div>
+        <div class="card">
+          <div class="card-title" id="title-domain">Revenue by Domain</div>
+          <div class="table-wrap"><table id="domain-table"></table></div>
+        </div>
+        <div class="card">
+          <div class="card-title" id="title-contracttype">Revenue by Contract Type</div>
+          <div class="table-wrap"><table id="contracttype-table"></table></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="card">
+          <div class="card-title" id="title-region">Revenue by Region</div>
+          <div class="table-wrap"><table id="region-table"></table></div>
+        </div>
+        <div class="card">
+          <div class="card-title" id="title-category">Revenue by Category</div>
+          <div class="table-wrap"><table id="category-table"></table></div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <!-- DETAIL / TEAMS -->
+  <div id="section-detail" class="section">
+    <div class="month-strip" id="detail-month-strip" style="margin-bottom:12px"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px">
+      <input type="text" id="d-search" placeholder="Search…" oninput="renderDetail()" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);font-size:12px;outline:none;width:160px">
+      <select id="d-filter-client" onchange="renderDetail()" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);font-size:12px;outline:none"><option value="">All clients</option></select>
+      <select id="d-filter-loc" onchange="renderDetail()" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);font-size:12px;outline:none"><option value="">All locations</option></select>
+      <select id="d-filter-cur" onchange="renderDetail()" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);font-size:12px;outline:none"><option value="">All currencies</option></select>
+      <button class="btn btn-green" style="padding:5px 12px" onclick="openModal(null)">+ Add</button>
+    </div>
+    <div class="table-wrap"><table id="detail-table"></table></div>
+
+  </div>
+
+
+  <!-- FX -->
+  <div id="section-fx" class="section">
+    <div class="info-box">
+      <strong>Monthly exchange rates (EUR → other currencies)</strong><br>
+      Enter how many units of each currency 1 EUR buys. Ex: 1 EUR = 1.46 SGD → enter <strong>1.46</strong>.<br>
+      Click <strong>Save rates</strong> to apply to all calculations.
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <span style="font-size:12px;color:var(--muted);white-space:nowrap">Add currency:</span>
+      <select id="fx-add-sel" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);font-size:12px;outline:none;min-width:230px"></select>
+      <button class="btn btn-blue" onclick="fxAddCurrency()" style="padding:6px 14px;font-size:12px">+ Add</button>
+      <span style="font-size:11px;color:var(--muted)">· Click <strong style="color:var(--red)">✕</strong> on a row to remove it</span>
+    </div>
+    <div class="card" style="overflow-x:auto">
+      <table class="fx-table" id="fx-grid"></table>
+    </div>
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn btn-green" onclick="saveFX()">✓ Save rates</button>
+    </div>
+  </div>
+
+  <!-- INVOICE -->
+  <div id="section-invoice" class="section">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div class="month-strip" id="invoice-month-strip" style="margin-bottom:0"></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span id="invoice-saved-badge" style="display:none;font-size:11px;color:var(--pos-color);font-weight:600">✓ Saved</span>
+        <button id="invoice-save-btn" class="btn btn-green" onclick="invoiceSave()" style="padding:6px 14px;font-size:12px">💾 Save</button>
+        <button id="invoice-cancel-btn" class="btn" onclick="invoiceCancel()" style="padding:6px 14px;font-size:12px;display:none">✕ Cancel</button>
+        <button class="btn btn-blue" onclick="exportInvoiceExcel()" style="padding:6px 14px;font-size:12px">⬇ Export Excel</button>
+      </div>
+    </div>
+
+    <div id="invoice-content"></div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Add consultant</div>
+    <div class="form-grid">
+      <div class="fg"><label class="fl">Name *</label><input class="fi" id="f-name" type="text" placeholder="First Last"></div>
+      <div class="fg"><label class="fl">Client *</label><input class="fi" id="f-client" type="text" placeholder="Client name" list="client-list"><datalist id="client-list"></datalist></div>
+      <div class="fg"><label class="fl">Contract</label><input class="fi" id="f-contract" type="text"></div>
+      <div class="fg"><label class="fl">Role</label><input class="fi" id="f-role" type="text"></div>
+      <div class="fg"><label class="fl">Hiring Company</label><input class="fi" id="f-company" type="text"></div>
+      <div class="fg"><label class="fl">Location</label><input class="fi" id="f-location" type="text"></div>
+      <div class="fg"><label class="fl">Contract Start</label><input class="fi" id="f-contract-start" type="date"></div>
+      <div class="fg"><label class="fl">Contract End</label><input class="fi" id="f-contract-end" type="date"></div>
+      <div class="fg"><label class="fl">Category</label><select class="fi" id="f-contract-category"><option value="Internal">Internal</option><option value="Intercompany">Intercompany</option></select></div>
+      <div class="fg"><label class="fl">Contract Type</label><select class="fi" id="f-contract-type"><option value="">— select —</option><option value="Fixed Price">Fixed Price</option><option value="Licence">Licence</option><option value="Maintenance">Maintenance</option><option value="Time & Material">Time &amp; Material</option><option value="Training">Training</option></select></div>
+
+      <div class="fg"><label class="fl">Cost type</label>
+        <div class="type-toggle" id="cost-type-toggle">
+          <button class="active" onclick="setCostType('monthly',this)">Monthly fixed</button>
+          <button onclick="setCostType('daily',this)">Daily rate</button>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Cost currency</label><select class="fi" id="f-cost-cur"></select></div>
+      <div class="fg" id="cost-monthly-group"><label class="fl">Cost / month</label><input class="fi" id="f-cost-month" type="number" placeholder="0"></div>
+      <div class="fg" id="cost-daily-group" style="display:none"><label class="fl">Cost / day</label><input class="fi" id="f-cost-day" type="number" placeholder="0"></div>
+
+      <div class="fg"><label class="fl">Revenue type</label>
+        <div class="type-toggle" id="rev-type-toggle">
+          <button onclick="setRevType('monthly',this)">Monthly fixed</button>
+          <button class="active" onclick="setRevType('daily',this)">Daily rate</button>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Revenue currency</label><select class="fi" id="f-rev-cur"></select></div>
+      <div class="fg" id="rev-monthly-group" style="display:none"><label class="fl">Rate / month</label><input class="fi" id="f-rev-month" type="number" placeholder="0"></div>
+      <div class="fg" id="rev-daily-group"><label class="fl">Rate / day</label><input class="fi" id="f-rev-day" type="number" placeholder="0"></div>
+    </div>
+
+    <div class="days-section">
+      <div class="days-label">Days per month</div>
+      <div class="days-sub">Top row = <span style="color:var(--accent)">planned</span> · Bottom row = <span style="color:var(--yellow)">realized</span></div>
+      <div class="days-grid" id="days-grid"></div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-muted" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-red" id="modal-delete-btn" onclick="deleteConsultant()" style="display:none">Delete</button>
+      <button class="btn btn-green" onclick="saveConsultant()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTHS_FR=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+// World currency defaults (EUR → X), values from screenshot + standard rates
+const DEFAULT_RATES={
+  EUR:1,
+  SGD:1.5111, USD:1.1919, HKD:9.3067,  INR:109.5825,VND:30000,
+  AUD:1.672,  GBP:0.87,   IDR:19800,   JPY:183,      MYR:4.6,
+  NZD:1.828,  PHP:62.5,
+  CAD:1.497,  CHF:0.941,  CNY:7.848,   KRW:1580,     TWD:35.8,
+  THB:38.2,   BRL:6.31,   MXN:21.8,    ZAR:20.4,     TRY:38.5,
+  AED:3.99,   SAR:4.07,   QAR:3.95,    KWD:0.333,    BHD:0.409,
+  PKR:300,    BDT:124,    LKR:320,     NGN:1780,      EGP:53.5,
+  KES:145,    GHS:16.8,   MAD:10.8,    DZD:145,       TND:3.37,
+  CLP:1010,   COP:4850,   PEN:4.02,    ARS:1195,      DKK:7.46,
+  SEK:11.47,  NOK:11.82,  PLN:4.26,    CZK:25.2,      HUF:405,
+  RON:5.01,   BGN:1.96,   UAH:45.2,    RUB:99.5,      ILS:3.97,
+  JOD:0.769,  MMK:3250,   KHR:4380,    BND:1.511,
+};
+const CURRENCY_NAMES={
+  EUR:'Euro',               SGD:'Singapore Dollar',   USD:'US Dollar',
+  HKD:'Hong Kong Dollar',   INR:'Indian Rupee',        VND:'Vietnamese Dong',
+  AUD:'Australian Dollar',  GBP:'British Pound',       IDR:'Indonesian Rupiah',
+  JPY:'Japanese Yen',       MYR:'Malaysian Ringgit',   NZD:'New Zealand Dollar',
+  PHP:'Philippine Peso',    CAD:'Canadian Dollar',     CHF:'Swiss Franc',
+  CNY:'Chinese Yuan',       KRW:'South Korean Won',    TWD:'Taiwan Dollar',
+  THB:'Thai Baht',          BRL:'Brazilian Real',      MXN:'Mexican Peso',
+  ZAR:'South African Rand', TRY:'Turkish Lira',        AED:'UAE Dirham',
+  SAR:'Saudi Riyal',        QAR:'Qatari Riyal',        KWD:'Kuwaiti Dinar',
+  BHD:'Bahraini Dinar',     PKR:'Pakistani Rupee',     BDT:'Bangladeshi Taka',
+  LKR:'Sri Lankan Rupee',   NGN:'Nigerian Naira',      EGP:'Egyptian Pound',
+  KES:'Kenyan Shilling',    GHS:'Ghanaian Cedi',       MAD:'Moroccan Dirham',
+  DZD:'Algerian Dinar',     TND:'Tunisian Dinar',      CLP:'Chilean Peso',
+  COP:'Colombian Peso',     PEN:'Peruvian Sol',        ARS:'Argentine Peso',
+  DKK:'Danish Krone',       SEK:'Swedish Krona',       NOK:'Norwegian Krone',
+  PLN:'Polish Zloty',       CZK:'Czech Koruna',        HUF:'Hungarian Forint',
+  RON:'Romanian Leu',       BGN:'Bulgarian Lev',       UAH:'Ukrainian Hryvnia',
+  RUB:'Russian Ruble',      ILS:'Israeli Shekel',      JOD:'Jordanian Dinar',
+  MMK:'Myanmar Kyat',       KHR:'Cambodian Riel',      BND:'Brunei Dollar',
+};
+// Active currencies stored in localStorage; default = those in the screenshot
+const FX_STORAGE_KEY = 'activeFXCurrencies_v1';
+const DEFAULT_ACTIVE = ['SGD','USD','HKD','INR','VND','AUD','GBP','IDR','JPY','MYR','NZD','PHP'];
+function getActiveCurrencies(){
+  try{ const s=localStorage.getItem(FX_STORAGE_KEY); if(s){const a=JSON.parse(s);if(Array.isArray(a)&&a.length)return a;} }catch(e){}
+  return [...DEFAULT_ACTIVE];
+}
+function setActiveCurrencies(list){ try{localStorage.setItem(FX_STORAGE_KEY,JSON.stringify(list));}catch(e){} }
+let ALL_CURRENCIES = ['EUR', ...getActiveCurrencies()];
+
+function rebuildAllCurrencies(){
+  ALL_CURRENCIES = ['EUR', ...getActiveCurrencies()];
+  // Ensure FX has rows for every active currency
+  for(const c of ALL_CURRENCIES){
+    if(!FX[c]){ FX[c]={}; for(const m of MONTHS) FX[c][m]=DEFAULT_RATES[c]??1; }
+  }
+}
+function mkFX(){
+  const f={};
+  // Use getActiveCurrencies so mkFX is always consistent
+  const active = ['EUR',...getActiveCurrencies()];
+  for(const c of active){f[c]={};for(const m of MONTHS)f[c][m]=DEFAULT_RATES[c]??1;}
+  return f;
+}
+
+let FX=mkFX();
+let consultants=[];
+let editingIdx=null;
+let chartMode='planned';
+let detailView='planned';
+let selectedMonth=null;
+let currentCostType='monthly';
+let currentRevType='daily';
+let dashMonth=null; // null = full year view
+let backlogMonth=null; // null = full year view
+
+const INIT=[{"name":"Alina Khudo","client":"BOC Aviation","contract":"Alina Khudo EPM Project Management","role":"Project Manager","company":"Partner","location":"Singapore","domain":"Data","industry":"","contract_start":"2026-02-23","contract_end":"2026-12-31","contract_total":126750.0,"contract_cur":"USD","contract_category":"Intercompany","contract_type":"Time & Material","invoice_entity":"KeysonEPM Asia","cost_type":"daily","cost_monthly":null,"cost_daily":650.0,"cost_cur":"SGD","rev_type":"daily","rev_monthly":null,"rev_daily":650.0,"rev_cur":"USD","planned":{"January":0,"February":5.0,"March":20.0,"April":18.0,"May":18.0,"June":18.0,"July":18.0,"August":18.0,"September":18.0,"October":18.0,"November":18.0,"December":18.0},"realized":{"January":0,"February":5.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Ashi Agrawal","client":"Sephora","contract":"Ashi Agrawal Support","role":"Data & Analytics Engineer Consultant","company":"Partner","location":"India","domain":"Data","industry":"Retail","contract_start":"2026-02-03","contract_end":"2026-07-31","contract_total":35520.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"Sephora","cost_type":"daily","cost_monthly":null,"cost_daily":220.0,"cost_cur":"USD","rev_type":"daily","rev_monthly":null,"rev_daily":370.0,"rev_cur":"USD","planned":{"January":0,"February":16.0,"March":16.0,"April":16.0,"May":16.0,"June":16.0,"July":16.0,"August":0,"September":0,"October":0,"November":0,"December":0},"realized":{"January":0,"February":16.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Avinesha Kumar","client":"BNP Paribas CIB Hong Kong","contract":"Avinesha Kumar Trading Project","role":"Confirmed QA Engineer","company":"Keyrus Hong Kong","location":"Hong-Kong","domain":"Banking applications","industry":"Banking","contract_start":"2025-09-29","contract_end":"2026-12-31","contract_total":820800.0,"contract_cur":"HKD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas CIB Hong Kong","cost_type":"monthly","cost_monthly":39600.0,"cost_daily":null,"cost_cur":"HKD","rev_type":"monthly","rev_monthly":68400.0,"rev_daily":null,"rev_cur":"HKD","planned":{"January":20.0,"February":19.0,"March":19.0,"April":19.0,"May":19.0,"June":19.0,"July":19.0,"August":19.0,"September":19.0,"October":19.0,"November":19.0,"December":19.0},"realized":{"January":20.0,"February":9.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Chrystelle Faure","client":"BNP Paribas WM Singapore","contract":"Chrystelle Faure Wealth Management coordination","role":"Business Analyst / PM","company":"Keyrus Singapore","location":"Singapore","domain":"Banking applications","industry":"Banking","contract_start":"2025-04-01","contract_end":"2026-12-31","contract_total":217800.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas WM Singapore","cost_type":"monthly","cost_monthly":13750.0,"cost_daily":null,"cost_cur":"SGD","rev_type":"monthly","rev_monthly":18150.0,"rev_daily":null,"rev_cur":"SGD","planned":{"January":17.5,"February":18.0,"March":18.0,"April":18.0,"May":18.0,"June":18.0,"July":18.0,"August":18.0,"September":18.0,"October":18.0,"November":18.0,"December":18.0},"realized":{"January":17.5,"February":14.5,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Emilia Barreto","client":"Sephora","contract":"Emilia Barreto Marketing Support","role":"Program Manager Consultant","company":"Partner","location":"Brazil","domain":"Digital","industry":"Retail","contract_start":"2025-12-10","contract_end":"2026-10-15","contract_total":138985.0,"contract_cur":"EUR","contract_category":"Intercompany","contract_type":"Time & Material","invoice_entity":"Keyrus France","cost_type":"daily","cost_monthly":null,"cost_daily":420.0,"cost_cur":"EUR","rev_type":"daily","rev_monthly":null,"rev_daily":731.5,"rev_cur":"EUR","planned":{"January":23.0,"February":20.0,"March":20.0,"April":19.0,"May":19.0,"June":19.0,"July":19.0,"August":19.0,"September":19.0,"October":10.0,"November":0,"December":0},"realized":{"January":23.0,"February":20.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Estella Guan","client":"DFS Hong-Kong","contract":"Estella Guan Data Management","role":"Senior Data Analyst","company":"Keyrus Hong Kong","location":"Hong-Kong","domain":"Data","industry":"","contract_start":"2023-01-16","contract_end":"2026-10-31","contract_total":39683.0,"contract_cur":"HKD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"DFS Hong-Kong","cost_type":"monthly","cost_monthly":57680.0,"cost_daily":null,"cost_cur":"HKD","rev_type":"daily","rev_monthly":null,"rev_daily":715.0,"rev_cur":"SGD","planned":{"January":20.5,"February":18.0,"March":18.5,"April":18.5,"May":18.5,"June":18.5,"July":18.5,"August":18.5,"September":18.5,"October":18.5,"November":0,"December":0},"realized":{"January":20.5,"February":12.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Feifei Yan","client":"Chanel Hong Kong","contract":"Feifei Yan Data Management","role":"Senior Data Analyst","company":"Keyrus Hong Kong","location":"Hong-Kong","domain":"Data","industry":"Luxury","contract_start":"2023-06-06","contract_end":"2026-02-28","contract_total":147630.0,"contract_cur":"HKD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"Chanel Hong Kong","cost_type":"monthly","cost_monthly":57680.0,"cost_daily":null,"cost_cur":"HKD","rev_type":"daily","rev_monthly":null,"rev_daily":3990.0,"rev_cur":"HKD","planned":{"January":20.0,"February":18.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0},"realized":{"January":20.0,"February":17.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Ferdinand Garcia","client":"Kenvue","contract":"Ferdinand Garcia Support PM","role":"Coordination and PM","company":"Keyrus Singapore","location":"Singapore","domain":"Data","industry":"CPG","contract_start":"2022-03-21","contract_end":"2026-12-31","contract_total":188700.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"Kenvue","cost_type":"monthly","cost_monthly":10920.0,"cost_daily":null,"cost_cur":"SGD","rev_type":"daily","rev_monthly":null,"rev_daily":850.0,"rev_cur":"SGD","planned":{"January":20.0,"February":18.0,"March":20.0,"April":18.5,"May":18.5,"June":18.5,"July":18.5,"August":18.5,"September":18.5,"October":18.5,"November":18.5,"December":18.5},"realized":{"January":20.0,"February":18.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Harshit Chaudhary","client":"BNP Paribas WM Singapore","contract":"Harshit Chaudhary Cloud Project","role":"Cloud Engineer","company":"Keyrus Singapore","location":"Singapore","domain":"Data","industry":"Banking","contract_start":"2025-06-16","contract_end":"2027-06-30","contract_total":70208.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas WM Singapore","cost_type":"monthly","cost_monthly":8958.0,"cost_daily":null,"cost_cur":"SGD","rev_type":"daily","rev_monthly":null,"rev_daily":690.0,"rev_cur":"SGD","planned":{"January":15.5,"February":17.0,"March":20.0,"April":18.5,"May":18.5,"June":18.5,"July":18.5,"August":18.5,"September":18.5,"October":18.5,"November":18.5,"December":18.5},"realized":{"January":15.5,"February":15.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Indhu Karpagakunjalam","client":"BNP Paribas CIB Hong Kong","contract":"Indhu Karpagakunjalam Trading Project","role":"QA Engineer","company":"Keyrus Hong Kong","location":"Hong Kong","domain":"Banking applications","industry":"Banking","contract_start":"2025-05-29","contract_end":"2026-12-31","contract_total":567720.0,"contract_cur":"HKD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas CIB Hong Kong","cost_type":"monthly","cost_monthly":31900.0,"cost_daily":null,"cost_cur":"HKD","rev_type":"monthly","rev_monthly":47310.0,"rev_daily":null,"rev_cur":"HKD","planned":{"January":21.0,"February":19.0,"March":19.0,"April":19.0,"May":19.0,"June":19.0,"July":19.0,"August":19.0,"September":19.0,"October":19.0,"November":19.0,"December":19.0},"realized":{"January":21.0,"February":15.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Jeeva","client":"GL Events","contract":"Jeeva SAP Commerce Cloud","role":"Tech Lead","company":"Partner","location":"India","domain":"Digital","industry":"Consulting / IT Services","contract_start":"2025-01-01","contract_end":"2026-06-30","contract_total":21600.0,"contract_cur":"EUR","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"GL Events","cost_type":"daily","cost_monthly":null,"cost_daily":25500.0,"cost_cur":"INR","rev_type":"daily","rev_monthly":null,"rev_daily":600.0,"rev_cur":"EUR","planned":{"January":3.0,"February":3.0,"March":3.0,"April":3.0,"May":3.0,"June":3.0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0},"realized":{"January":3.0,"February":4.5,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Jonathan Ling","client":"BNP Paribas CIB Hong Kong","contract":"Jonathan Ling Trading Project","role":"QA Engineer","company":"Keyrus Hong Kong","location":"Hong-Kong","domain":"Banking applications","industry":"Banking","contract_start":"2025-05-29","contract_end":"2026-12-31","contract_total":567720.0,"contract_cur":"HKD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas CIB Hong Kong","cost_type":"monthly","cost_monthly":31900.0,"cost_daily":null,"cost_cur":"HKD","rev_type":"monthly","rev_monthly":47310.0,"rev_daily":null,"rev_cur":"HKD","planned":{"January":20.5,"February":19.0,"March":19.0,"April":19.0,"May":19.0,"June":19.0,"July":19.0,"August":19.0,"September":19.0,"October":19.0,"November":19.0,"December":19.0},"realized":{"January":20.5,"February":12.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Marcos Coelho","client":"Sephora","contract":"Marcos Coelho Marketing Support","role":"Product Owner Consultant","company":"Partner","location":"Brazil","domain":"Digital","industry":"Retail","contract_start":"2025-12-15","contract_end":"2026-10-15","contract_total":61370.0,"contract_cur":"EUR","contract_category":"Intercompany","contract_type":"Time & Material","invoice_entity":"Keyrus France","cost_type":"daily","cost_monthly":null,"cost_daily":181.0,"cost_cur":"EUR","rev_type":"daily","rev_monthly":null,"rev_daily":323.0,"rev_cur":"EUR","planned":{"January":20.0,"February":20.0,"March":20.0,"April":19.0,"May":19.0,"June":19.0,"July":19.0,"August":19.0,"September":19.0,"October":10.0,"November":0,"December":0},"realized":{"January":20.0,"February":19.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Naga Jagadish Gupta","client":"BNP Paribas WM Singapore","contract":"Naga Jagadish Gupta support PM/BA","role":"Business Analyst / PM","company":"Keyrus Singapore","location":"Singapore","domain":"Banking applications","industry":"Banking","contract_start":"2025-01-10","contract_end":"2026-12-31","contract_total":170940.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas WM Singapore","cost_type":"monthly","cost_monthly":11300.0,"cost_daily":null,"cost_cur":"SGD","rev_type":"daily","rev_monthly":null,"rev_daily":770.0,"rev_cur":"SGD","planned":{"January":14.0,"February":16.0,"March":16.0,"April":18.5,"May":18.5,"June":18.5,"July":18.5,"August":18.5,"September":18.5,"October":18.5,"November":18.5,"December":18.5},"realized":{"January":14.0,"February":12.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Nursyahilla Syaszuanis Mahmood","client":"BNP Paribas CIB Singapore","contract":"Nursyahilla Syaszuanis Mahmood BA/PM","role":"IT Application Support Consultant","company":"Keyrus Singapore","location":"Singapore","domain":"Banking applications","industry":"Banking","contract_start":"2023-03-01","contract_end":"2026-12-31","contract_total":132090.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas CIB Singapore","cost_type":"monthly","cost_monthly":7137.0,"cost_daily":null,"cost_cur":"SGD","rev_type":"daily","rev_monthly":null,"rev_daily":595.0,"rev_cur":"SGD","planned":{"January":10.0,"February":14.0,"March":19.0,"April":18.5,"May":18.5,"June":18.5,"July":18.5,"August":18.5,"September":18.5,"October":18.5,"November":18.5,"December":18.5},"realized":{"January":10.0,"February":11.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Ponniah Kannan","client":"BNP Paribas WM Singapore","contract":"Ponniah Kannan Support","role":"Business Analyst / PM","company":"Keyrus Singapore","location":"Singapore","domain":"Data","industry":"Banking","contract_start":"2025-06-16","contract_end":"2027-06-30","contract_total":85470.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas WM Singapore","cost_type":"monthly","cost_monthly":11000.0,"cost_daily":null,"cost_cur":"SGD","rev_type":"daily","rev_monthly":null,"rev_daily":840.0,"rev_cur":"SGD","planned":{"January":20.0,"February":16.0,"March":19.0,"April":18.5,"May":10.0,"June":18.5,"July":18.5,"August":18.5,"September":18.5,"October":18.5,"November":18.5,"December":18.5},"realized":{"January":20.0,"February":18.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Rohin Prasanth","client":"Fullerton","contract":"Rohin Prasanth RPA Project","role":"RPA Consultant","company":"Keyrus Singapore","location":"Singapore","domain":"Data","industry":"Finance / Real Estate","contract_start":"2025-08-04","contract_end":"2026-12-31","contract_total":97200.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"Fullerton","cost_type":"monthly","cost_monthly":5382.0,"cost_daily":null,"cost_cur":"SGD","rev_type":"monthly","rev_monthly":8100.0,"rev_daily":null,"rev_cur":"SGD","planned":{"January":18.0,"February":18.0,"March":18.0,"April":18.0,"May":18.0,"June":18.0,"July":18.0,"August":18.0,"September":18.0,"October":18.0,"November":18.0,"December":18.0},"realized":{"January":18.0,"February":16.5,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Saumya Agrawal","client":"Chanel Hong Kong","contract":"Saumya Agrawal Data Management","role":"Senior Data Analyst","company":"Keyrus Hong Kong","location":"Hong Kong","domain":"RPA","industry":"Luxury","contract_start":"2023-01-30","contract_end":"2026-12-31","contract_total":1075368.0,"contract_cur":"HKD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"Chanel Hong Kong","cost_type":"monthly","cost_monthly":65520.0,"cost_daily":null,"cost_cur":"HKD","rev_type":"daily","rev_monthly":null,"rev_daily":4844.0,"rev_cur":"HKD","planned":{"January":20.0,"February":17.0,"March":20.0,"April":18.5,"May":18.5,"June":18.5,"July":18.5,"August":18.5,"September":18.5,"October":18.5,"November":18.5,"December":18.5},"realized":{"January":20.0,"February":12.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Sitarai Qaisara","client":"Fullerton","contract":"Sitarai  Qaisara RPA Project","role":"UiPath Engineer","company":"Keyrus Singapore","location":"Singapore","domain":"RPA","industry":"Finance / Real Estate","contract_start":"2023-03-06","contract_end":"2026-12-31","contract_total":120000.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"Fullerton","cost_type":"monthly","cost_monthly":6669.0,"cost_daily":null,"cost_cur":"SGD","rev_type":"monthly","rev_monthly":10000.0,"rev_daily":null,"rev_cur":"SGD","planned":{"January":21.0,"February":17.0,"March":19.0,"April":18.5,"May":18.5,"June":18.5,"July":18.5,"August":18.5,"September":18.5,"October":18.5,"November":18.5,"December":18.5},"realized":{"January":21.0,"February":15.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Smita Kalunge","client":"BNP Paribas CIB Hong Kong","contract":"Smita Kalunge Trading Project","role":"Senior QA Engineer","company":"Keyrus Hong Kong","location":"Hong Kong","domain":"Banking applications","industry":"Banking","contract_start":"2025-01-20","contract_end":"2026-12-31","contract_total":843600.0,"contract_cur":"HKD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas CIB Hong Kong","cost_type":"monthly","cost_monthly":53900.0,"cost_daily":null,"cost_cur":"HKD","rev_type":"monthly","rev_monthly":70300.0,"rev_daily":null,"rev_cur":"HKD","planned":{"January":19.0,"February":19.0,"March":19.0,"April":19.0,"May":19.0,"June":19.0,"July":19.0,"August":19.0,"September":19.0,"October":19.0,"November":19.0,"December":19.0},"realized":{"January":19.0,"February":13.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Someya Singh","client":"BNP Paribas CIB Hong Kong","contract":"Someya Singh Trading Project","role":"Senior QA Engineer","company":"Keyrus Hong Kong","location":"Hong Kong","domain":"Banking applications","industry":"Banking","contract_start":"2025-01-06","contract_end":"2026-12-31","contract_total":855000.0,"contract_cur":"HKD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas CIB Hong Kong","cost_type":"monthly","cost_monthly":51150.0,"cost_daily":null,"cost_cur":"HKD","rev_type":"monthly","rev_monthly":71250.0,"rev_daily":null,"rev_cur":"HKD","planned":{"January":21.0,"February":19.0,"March":19.0,"April":19.0,"May":19.0,"June":19.0,"July":19.0,"August":19.0,"September":19.0,"October":19.0,"November":19.0,"December":19.0},"realized":{"January":21.0,"February":11.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Thai Phan","client":"Clarins","contract":"Thai Phan Salesforce Commerce Cloud","role":"Salesforce Commerce Developer","company":"Partner","location":"Vietnam","domain":"Digital","industry":"Luxury","contract_start":"2023-08-21","contract_end":"2026-06-30","contract_total":53280.0,"contract_cur":"EUR","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"Clarins","cost_type":"daily","cost_monthly":null,"cost_daily":184.0,"cost_cur":"USD","rev_type":"daily","rev_monthly":null,"rev_daily":480.0,"rev_cur":"EUR","planned":{"January":21.0,"February":17.0,"March":20.0,"April":19.0,"May":19.0,"June":19.0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0},"realized":{"January":21.0,"February":18.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Udhaya Rathinavel","client":"BNP Paribas WM Singapore","contract":"Udhaya Rathinavel Support PM/BA","role":"Business Analyst / PM","company":"Keyrus Singapore","location":"Singapore","domain":"Banking applications","industry":"Banking","contract_start":"2024-11-04","contract_end":"2026-12-31","contract_total":164280.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"BNP Paribas WM Singapore","cost_type":"monthly","cost_monthly":10500.0,"cost_daily":null,"cost_cur":"SGD","rev_type":"daily","rev_monthly":null,"rev_daily":740.0,"rev_cur":"SGD","planned":{"January":20.0,"February":17.0,"March":19.0,"April":18.5,"May":18.5,"June":18.5,"July":18.5,"August":18.5,"September":18.5,"October":18.5,"November":18.5,"December":18.5},"realized":{"January":20.0,"February":16.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Waikei Lau","client":"DFS Hong-Kong","contract":"Waikei Lau Data Management","role":"Senior Data Analyst","company":"Keyrus Hong Kong","location":"Hong Kong","domain":"Data","industry":"","contract_start":"2025-05-19","contract_end":"2026-02-22","contract_total":21563.5,"contract_cur":"HKD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"DFS Hong-Kong","cost_type":"monthly","cost_monthly":53900.0,"cost_daily":null,"cost_cur":"HKD","rev_type":"daily","rev_monthly":null,"rev_daily":707.0,"rev_cur":"SGD","planned":{"January":20.5,"February":10.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0},"realized":{"January":20.5,"February":10.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Youssef Elkarmi","client":"Sephora","contract":"Youssef Elkarmi Marketing Support","role":"Product Owner Consultant","company":"Partner","location":"Mexico","domain":"Digital","industry":"Retail","contract_start":"2025-12-15","contract_end":"2026-02-15","contract_total":10545.0,"contract_cur":"EUR","contract_category":"Intercompany","contract_type":"Time & Material","invoice_entity":"Keyrus France","cost_type":"daily","cost_monthly":null,"cost_daily":181.0,"cost_cur":"EUR","rev_type":"daily","rev_monthly":null,"rev_daily":351.5,"rev_cur":"EUR","planned":{"January":20.0,"February":8.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0},"realized":{"January":20.0,"February":8.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}},{"name":"Zosimo Pascua","client":"Louis Vuitton","contract":"Zosimo Pascua Support Cyber","role":"Cybersecurity consultant","company":"Keyrus Singapore","location":"Singapore","domain":"Cybersecurity","industry":"Luxury","contract_start":"2020-06-02","contract_end":"2026-12-31","contract_total":164280.0,"contract_cur":"SGD","contract_category":"Internal","contract_type":"Time & Material","invoice_entity":"Louis Vuitton","cost_type":"monthly","cost_monthly":9780.0,"cost_daily":null,"cost_cur":"SGD","rev_type":"daily","rev_monthly":null,"rev_daily":740.0,"rev_cur":"SGD","planned":{"January":17.0,"February":17.0,"March":19.0,"April":18.5,"May":18.5,"June":18.5,"July":18.5,"August":18.5,"September":18.5,"October":18.5,"November":18.5,"December":18.5},"realized":{"January":17.0,"February":16.0,"March":0,"April":0,"May":0,"June":0,"July":0,"August":0,"September":0,"October":0,"November":0,"December":0}}];
+
+function loadData(){
+  try{
+    const s=localStorage.getItem('forecast2026v7');
+    if(s){
+      const d=JSON.parse(s);
+      if(!d.c||!d.c.length) throw new Error('empty');
+      consultants=d.c;
+      // Backfill fields from INIT in case localStorage has stale data
+      const initMap={};INIT.forEach(c=>{initMap[c.name]=c;});
+      consultants.forEach(c=>{
+        const src=initMap[c.name];
+        if(!src) return;
+        if(!c.domain        ) c.domain          = src.domain          || '';
+        if(!c.industry      ) c.industry         = src.industry        || '';
+        // Always sync from INIT — these were corrupted by old saves
+        c.contract_category = src.contract_category || c.contract_category || 'Internal';
+        c.contract_type     = src.contract_type     || c.contract_type     || '';
+      });
+      // Merge saved FX over fresh defaults so new currencies (e.g. VND) are never missing
+      const base=mkFX();
+      if(d.f){
+        for(const cur of ALL_CURRENCIES){
+          if(d.f[cur]){
+            for(const m of MONTHS){
+              const v=d.f[cur][m];
+              if(v&&!isNaN(v)&&v>0)base[cur][m]=v;
+            }
+          }
+        }
+      }
+      FX=base;
+      return;
+    }
+  }catch(e){}
+  consultants=JSON.parse(JSON.stringify(INIT));FX=mkFX();
+}
+function saveData(){try{localStorage.setItem('forecast2026v7',JSON.stringify({c:consultants,f:FX}));}catch(e){}}
+
+function toEUR(amount,currency,month){
+  if(!amount||!currency)return 0;
+  if(currency==='EUR')return amount;
+  // FX[currency][month] = how many units of currency per 1 EUR
+  const rate=FX[currency]?.[month]??DEFAULT_RATES[currency]??1;
+  return amount/rate;
+}
+function getMonthData(c,month,view){
+  const rDays=(c.realized?.[month])||0;
+  // Use realized days when available, regardless of view
+  const days=rDays>0?rDays:((c[view]?.[month])||0);
+  // Cost: independently monthly or daily
+  let cost_local = c.cost_type==='monthly'
+    ? (days>0 ? (c.cost_monthly||0) : 0)
+    : (c.cost_daily||0)*days;
+  // Revenue: independently monthly or daily
+  let rev_local = c.rev_type==='monthly'
+    ? (days>0 ? (c.rev_monthly||0) : 0)
+    : (c.rev_daily||0)*days;
+  const cost_eur = toEUR(cost_local, c.cost_cur||'SGD', month);
+  const rev_eur  = toEUR(rev_local,  c.rev_cur||'SGD',  month);
+  return{days,cost_local,rev_local,cost_eur,rev_eur};
+}
+function monthTotals(month,view){
+  let rev=0,cost=0;
+  for(const c of consultants){const d=getMonthData(c,month,view);rev+=d.rev_eur;cost+=d.cost_eur;}
+  return{rev,cost,margin:rev-cost,pct:rev>0?(rev-cost)/rev*100:0};
+}
+function yearTotals(view){
+  let rev=0,cost=0;
+  for(const m of MONTHS){const t=monthTotals(m,view);rev+=t.rev;cost+=t.cost;}
+  return{rev,cost,margin:rev-cost,pct:rev>0?(rev-cost)/rev*100:0};
+}
+
+function fmt(n,d=0){if(n===undefined||n===null||isNaN(n))return'—';return new Intl.NumberFormat('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}).format(Math.round(n));}
+function fE(n){return'€'+fmt(n);}
+function mc(p){return p>=25?'pos':p>=0?'neu':'neg';}
+function bc(p){return p>=25?'var(--accent)':p>=0?'var(--yellow)':'var(--red)';}
+
+// DASHBOARD
+function renderMonthStrip(){
+  const strip=document.getElementById('dash-month-strip');
+  if(!strip)return;
+  let h=`<button class="ms-btn all ${dashMonth===null?'active':''}" onclick="setDashMonth(null)">Full Year</button>`;
+  MONTHS.forEach((m,i)=>{h+=`<button class="ms-btn ${dashMonth===m?'active':''}" onclick="setDashMonth('${m}')">${MONTHS_FR[i]}</button>`;});
+  strip.innerHTML=h;
+}
+function setDashMonth(m){
+  dashMonth=m;
+  document.querySelectorAll('#dash-month-strip .ms-btn').forEach(b=>b.classList.toggle('active',b.textContent===MONTHS_FR[MONTHS.indexOf(m)]||(m===null&&b.dataset.all==='1')));
+  renderDashboard();
+}
+function renderDashboard(){
+  renderMonthStrip();
+  const months=dashMonth?[dashMonth]:MONTHS;
+  const isYear=dashMonth===null;
+
+  // Annual Revenue = realized where realized_days>0, planned where realized_days=0 & planned_days>0
+  // A month is "reported" if any consultant has realized_days>0 for it
+  const reportedMonths = new Set();
+  for(const c of consultants)
+    for(const m of MONTHS)
+      if((c.realized?.[m]||0)>0) reportedMonths.add(m);
+
+  // For single-month view, revRealized is cumulative: all months up to & including dashMonth
+  const cumulativeMonths = dashMonth ? MONTHS.slice(0, MONTHS.indexOf(dashMonth)+1) : null;
+
+  let rev=0, cost=0, revRealized=0, revPlanned=0;
+  for(const c of consultants){
+    // Current month revenue/cost (or full year)
+    for(const m of months){
+      const rDays = c.realized?.[m]||0;
+      const pDays = c.planned?.[m]||0;
+      if(rDays>0){
+        const d = getMonthData(c,m,'realized');
+        rev+=d.rev_eur; cost+=d.cost_eur;
+      } else if(pDays>0){
+        const d = getMonthData(c,m,'planned');
+        rev+=d.rev_eur; cost+=d.cost_eur;
+      }
+    }
+    // Realized (to date): cumulative up to selected month (or full year)
+    const rtdMonths = cumulativeMonths || MONTHS;
+    for(const m of rtdMonths){
+      const rDays = c.realized?.[m]||0;
+      const pDays = c.planned?.[m]||0;
+      // Rule: realized if rDays>0, else planned (month-by-month, no gap)
+      if(rDays>0){
+        revRealized += getMonthData(c,m,'realized').rev_eur;
+      } else if(pDays>0){
+        revRealized += getMonthData(c,m,'planned').rev_eur;
+      }
+    }
+  }
+  const margin=rev-cost, pct=rev>0?margin/rev*100:0;
+  const scopeLabel=isYear?`${consultants.length} consultants`:dashMonth;
+  // For a selected month: if no realized data at all → show as planned
+  const monthHasRealized = dashMonth ? consultants.some(c=>(c.realized?.[dashMonth]||0)>0) : revRealized>0;
+  const revLabel   = isYear ? 'Annual Revenue' : 'Monthly Revenue';
+  const costLabel  = isYear ? 'Annual Costs'   : 'Monthly Costs';
+  // Backlog = planned revenue for months where no consultant has realized days yet
+  const unrealizedMonths = MONTHS.filter(m => !consultants.some(c=>(c.realized?.[m]||0)>0));
+  let backlog = 0;
+  for(const c of consultants)
+    for(const m of unrealizedMonths){
+      const pDays=c.planned?.[m]||0;
+      if(pDays>0) backlog += getMonthData(c,m,'planned').rev_eur;
+    }
+  const revSub = `backlog ${fE(backlog)}`;
+  const BUDGET_EUR = 3000000;
+  const realizedCard = `<div class="kpi b"><div class="kpi-label">Realized (to date)${dashMonth?' · cumulative':''}</div><div class="kpi-value b">${fE(revRealized)}</div><div class="kpi-sub">${fmt(revRealized/BUDGET_EUR*100,1)}% of 3M€ budget</div></div>`;
+  document.getElementById('kpi-grid').innerHTML=`
+    <div class="kpi g"><div class="kpi-label">${revLabel}</div><div class="kpi-value g">${fE(rev)}</div><div class="kpi-sub">${revSub}</div></div>
+    ${realizedCard}
+    <div class="kpi r"><div class="kpi-label">${costLabel}</div><div class="kpi-value r">${fE(cost)}</div><div class="kpi-sub">${scopeLabel}</div></div>
+    <div class="kpi y"><div class="kpi-label">Gross Margin</div><div class="kpi-value y">${fE(margin)}</div><div class="kpi-sub">${fmt(pct,1)}% margin</div></div>
+`;
+  renderClientTable();renderIndustryTable();renderRegionTable();renderDomainTable();renderCategoryTable();renderContractTypeTable();
+}
+
+let clientSortCol='rev', clientSortDir=-1;
+window.renderBySort_client = col => { if(clientSortCol===col)clientSortDir*=-1; else{clientSortCol=col;clientSortDir=col==='client'?1:-1;} renderClientTable(); };
+function renderClientTable(){
+  const months=dashMonth?[dashMonth]:MONTHS;
+  const m={};
+  for(const c of consultants){
+    if(!m[c.client])m[c.client]={rev:0,cost:0};
+    for(const mo of months){
+      const rDays=c.realized?.[mo]||0, pDays=c.planned?.[mo]||0;
+      const d = rDays>0 ? getMonthData(c,mo,'realized') : pDays>0 ? getMonthData(c,mo,'planned') : null;
+      if(d){ m[c.client].rev+=d.rev_eur; m[c.client].cost+=d.cost_eur; }
+    }
+  }
+  let rows=Object.entries(m).map(([cl,v])=>({cl,v}));
+  rows.sort((a,b)=>{
+    let va,vb;
+    if(clientSortCol==='client')    {va=a.cl;vb=b.cl;}
+    else if(clientSortCol==='rev')  {va=a.v.rev;vb=b.v.rev;}
+    else if(clientSortCol==='biz')  {va=a.v.rev;vb=b.v.rev;}
+    else if(clientSortCol==='cost') {va=a.v.cost;vb=b.v.cost;}
+    else if(clientSortCol==='margin'){va=a.v.rev-a.v.cost;vb=b.v.rev-b.v.cost;}
+    else if(clientSortCol==='pct')  {va=a.v.rev>0?(a.v.rev-a.v.cost)/a.v.rev:0;vb=b.v.rev>0?(b.v.rev-b.v.cost)/b.v.rev:0;}
+    if(typeof va==='string') return clientSortDir*va.localeCompare(vb);
+    return clientSortDir*(va-vb);
+  });
+  const periodLabel=dashMonth?dashMonth:'Full Year';
+  const el=document.querySelector('#section-dashboard .card-title');
+  if(el) el.textContent=`Revenue by Client — ${periodLabel} (realized + planned, EUR)`;
+  const thC=(col,label,num=false)=>thSort('client',col,label,clientSortCol,num);
+  const totalRev = rows.reduce((s,{v})=>s+v.rev, 0);
+  let h=`<thead><tr>${thC('client','Client')}${thC('rev','Revenue EUR',true)}${thC('biz','Business %',true)}${thC('cost','Costs EUR',true)}${thC('margin','Margin EUR',true)}${thC('pct','Margin %',true)}</tr></thead><tbody>`;
+  let tR=0,tC=0;
+  for(const {cl,v} of rows){const mg=v.rev-v.cost,pct=v.rev>0?mg/v.rev*100:0,biz=totalRev>0?v.rev/totalRev*100:0;tR+=v.rev;tC+=v.cost;
+    h+=`<tr><td>${cl}</td><td class="pos">${fE(v.rev)}</td><td style="color:var(--muted)">${fmt(biz,1)}%</td><td class="neg">${fE(v.cost)}</td><td class="${mc(pct)}">${fE(mg)}</td>
+    <td><div class="mbar"><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0,Math.min(100,pct))}%;background:${bc(pct)}"></div></div><span class="${mc(pct)}" style="font-size:11px">${fmt(pct,1)}%</span></div></td></tr>`;}
+  const tM=tR-tC,tP=tR>0?tM/tR*100:0;
+  h+=`<tr style="border-top:2px solid var(--border)"><td><strong>Total</strong></td><td class="pos"><strong>${fE(tR)}</strong></td><td><strong>100%</strong></td><td class="neg"><strong>${fE(tC)}</strong></td><td class="${mc(tP)}"><strong>${fE(tM)}</strong></td><td><strong class="${mc(tP)}">${fmt(tP,1)}%</strong></td></tr></tbody>`;
+  document.getElementById('client-table').innerHTML=h;
+}
+
+// ── BREAKDOWN TABLES (Industry / Region / Domain / Category / Contract Type) ─
+let industrySortCol='rev', industrySortDir=-1;
+let regionSortCol='rev',   regionSortDir=-1;
+let domainSortCol='rev',   domainSortDir=-1;
+let categorySortCol='rev', categorySortDir=-1;
+let ctypeSortCol='rev',    ctypeSortDir=-1;
+window.renderBySort_industry     = col=>{ if(industrySortCol===col)industrySortDir*=-1; else{industrySortCol=col;industrySortDir=col==='key'?1:-1;} renderIndustryTable(); };
+window.renderBySort_region       = col=>{ if(regionSortCol===col)regionSortDir*=-1;     else{regionSortCol=col;regionSortDir=col==='key'?1:-1;}   renderRegionTable(); };
+window.renderBySort_domain       = col=>{ if(domainSortCol===col)domainSortDir*=-1;     else{domainSortCol=col;domainSortDir=col==='key'?1:-1;}   renderDomainTable(); };
+window.renderBySort_category     = col=>{ if(categorySortCol===col)categorySortDir*=-1; else{categorySortCol=col;categorySortDir=col==='key'?1:-1;} renderCategoryTable(); };
+window.renderBySort_contracttype = col=>{ if(ctypeSortCol===col)ctypeSortDir*=-1;       else{ctypeSortCol=col;ctypeSortDir=col==='key'?1:-1;}     renderContractTypeTable(); };
+
+function renderBreakdownTable(tableId, titleId, titleLabel, keyFn, sortCol, sortDir, sortKey){
+  const months = dashMonth ? [dashMonth] : MONTHS;
+  const m = {};
+  for(const c of consultants){
+    const key = keyFn(c) || '—';
+    if(!m[key]) m[key] = {rev:0, cost:0};
+    for(const mo of months){
+      const rDays=c.realized?.[mo]||0, pDays=c.planned?.[mo]||0;
+      const d = rDays>0 ? getMonthData(c,mo,'realized') : pDays>0 ? getMonthData(c,mo,'planned') : null;
+      if(d){ m[key].rev+=d.rev_eur; m[key].cost+=d.cost_eur; }
+    }
+  }
+  let rows = Object.entries(m).map(([key,v])=>({key,v}));
+  rows.sort((a,b)=>{
+    let va,vb;
+    if(sortCol==='key')        {va=a.key;vb=b.key;}
+    else if(sortCol==='rev')   {va=a.v.rev;vb=b.v.rev;}
+    else if(sortCol==='biz')   {va=a.v.rev;vb=b.v.rev;}
+    else if(sortCol==='cost')  {va=a.v.cost;vb=b.v.cost;}
+    else if(sortCol==='margin'){va=a.v.rev-a.v.cost;vb=b.v.rev-b.v.cost;}
+    else if(sortCol==='pct')   {va=a.v.rev>0?(a.v.rev-a.v.cost)/a.v.rev:0;vb=b.v.rev>0?(b.v.rev-b.v.cost)/b.v.rev:0;}
+    if(typeof va==='string') return sortDir*va.localeCompare(vb);
+    return sortDir*(va-vb);
+  });
+  const periodLabel = dashMonth ? dashMonth : 'Full Year';
+  const el = document.getElementById(titleId);
+  if(el) el.textContent = titleLabel + ' — ' + periodLabel + ' (realized + planned, EUR)';
+  const th=(col,label,num=false)=>thSort(sortKey,col,label,sortCol,num);
+  const totalRev = rows.reduce((s,{v})=>s+v.rev, 0);
+  let html='<thead><tr>'+th('key',titleLabel.split(' ').pop())+th('rev','Revenue EUR',true)+th('biz','Business %',true)+th('cost','Costs EUR',true)+th('margin','Margin EUR',true)+th('pct','Margin %',true)+'</tr></thead><tbody>';
+  let tR=0,tC=0;
+  for(const {key,v} of rows){
+    const mg=v.rev-v.cost, pct=v.rev>0?mg/v.rev*100:0, biz=totalRev>0?v.rev/totalRev*100:0;
+    tR+=v.rev; tC+=v.cost;
+    html+='<tr><td>'+key+'</td>'
+      +'<td class="pos">'+fE(v.rev)+'</td>'
+      +'<td style="color:var(--muted)">'+fmt(biz,1)+'%</td>'
+      +'<td class="neg">'+fE(v.cost)+'</td>'
+      +'<td class="'+mc(pct)+'">'+fE(mg)+'</td>'
+      +'<td><div class="mbar"><div class="bar-track"><div class="bar-fill" style="width:'+Math.max(0,Math.min(100,pct))+'%;background:'+bc(pct)+'"></div></div>'
+      +'<span class="'+mc(pct)+'" style="font-size:11px">'+fmt(pct,1)+'%</span></div></td></tr>';
+  }
+  const tM=tR-tC, tP=tR>0?tM/tR*100:0;
+  html+='<tr style="border-top:2px solid var(--border)"><td><strong>Total</strong></td>'
+    +'<td class="pos"><strong>'+fE(tR)+'</strong></td>'
+    +'<td><strong>100%</strong></td>'
+    +'<td class="neg"><strong>'+fE(tC)+'</strong></td>'
+    +'<td class="'+mc(tP)+'"><strong>'+fE(tM)+'</strong></td>'
+    +'<td><strong class="'+mc(tP)+'">'+fmt(tP,1)+'%</strong></td></tr></tbody>';
+  document.getElementById(tableId).innerHTML = html;
+}
+
+function renderIndustryTable(){     renderBreakdownTable('industry-table',    'title-industry',    'Revenue by Industry',      c=>c.industry,               industrySortCol, industrySortDir, 'industry'); }
+function renderRegionTable(){       renderBreakdownTable('region-table',      'title-region',      'Revenue by Region',        c=>c.location,               regionSortCol,   regionSortDir,   'region'); }
+function renderDomainTable(){       renderBreakdownTable('domain-table',      'title-domain',      'Revenue by Domain',        c=>c.domain,                 domainSortCol,   domainSortDir,   'domain'); }
+function renderCategoryTable(){     renderBreakdownTable('category-table',    'title-category',    'Revenue by Category',      c=>c.contract_category||'—', categorySortCol, categorySortDir, 'category'); }
+function renderContractTypeTable(){ renderBreakdownTable('contracttype-table','title-contracttype','Revenue by Contract Type', c=>c.contract_type||'—',     ctypeSortCol,    ctypeSortDir,    'contracttype'); }
+
+
+function renderYearGrid(){
+  document.getElementById('year-grid').innerHTML=MONTHS.map((m,i)=>{
+    const t=monthTotals(m,'planned');
+    return`<div class="mc ${m===selectedMonth?'sel':''}" onclick="selectMonth('${m}')"><div class="mc-name">${MONTHS_FR[i]}</div><div class="mc-val ${mc(t.pct)}">${fmt(t.pct,0)}%</div><div class="mc-sub">${fE(t.rev)}</div></div>`;
+  }).join('');
+}
+function selectMonth(m){
+  selectedMonth=m;
+  renderYearGrid();
+  renderDetailStrip();
+  renderDetail();
+}
+function renderDetailStrip(){
+  const el=document.getElementById('detail-month-strip');
+  if(!el)return;
+  let h=`<button class="ms-btn all ${selectedMonth===null?'active':''}" onclick="setDetailMonth(null)">All Months</button>`;
+  MONTHS.forEach((m,i)=>{h+=`<button class="ms-btn ${selectedMonth===m?'active':''}" onclick="setDetailMonth('${m}')">${MONTHS_FR[i]}</button>`;});
+  el.innerHTML=h;
+}
+function setDetailMonth(m){
+  selectedMonth=m;
+  renderDetailStrip();
+  renderDetail();
+}
+function setDetailView(v,btn){detailView=v;if(btn){btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}renderDetail();}
+
+// SORT ENGINE
+const sortState = {}; // key -> {col, dir}
+function sortRows(key, rows, col, valFn){
+  const st = sortState[key] || {col:null, dir:1};
+  const dir = st.col===col ? -st.dir : 1;
+  sortState[key] = {col, dir};
+  return [...rows].sort((a,b)=>{
+    const va=valFn(a,col), vb=valFn(b,col);
+    if(typeof va==='string') return dir*va.localeCompare(vb);
+    return dir*(va-vb);
+  });
+}
+function thSort(key, col, label, currentCol, numeric=false){
+  const st = sortState[key]||{col:null,dir:1};
+  const active = st.col===col;
+  const arrow = active ? (st.dir===1?'↑':'↓') : '<span style="opacity:.25">↕</span>';
+  const cls = (numeric?'num ':'')+' sortable'+(active?' sort-active':'');
+  return `<th class="${cls}" onclick="thClick('${key}','${col}')" style="cursor:pointer;user-select:none;white-space:nowrap">${label} ${arrow}</th>`;
+}
+function thClick(key,col){ window[`renderBySort_${key}`] && window[`renderBySort_${key}`](col); }
+
+let detailSortCol=null,detailSortDir=1;
+window.renderBySort_detail = col => { if(detailSortCol===col)detailSortDir*=-1; else{detailSortCol=col;detailSortDir=1;} renderDetail(); };
+function renderDetail(){
+  const cf  = document.getElementById('d-filter-client').value;
+  const cur  = document.getElementById('d-filter-cur').value;
+  const lf   = document.getElementById('d-filter-loc')?.value || '';
+  const q    = (document.getElementById('d-search')?.value || '').toLowerCase();
+  const SK   = 'detail';
+
+  const MIDX={January:0,February:1,March:2,April:3,May:4,June:5,July:6,August:7,September:8,October:9,November:10,December:11};
+  let rows=[];
+  for(let i=0;i<consultants.length;i++){
+    const c=consultants[i];
+    if(cf  && c.client!==cf) continue;
+    if(cur && c.rev_cur!==cur) continue;
+    if(lf  && (c.location||'')!==lf) continue;
+    if(q   && !c.name.toLowerCase().includes(q) && !c.client.toLowerCase().includes(q)) continue;
+    if(selectedMonth){
+      const mi=MIDX[selectedMonth];
+      const ms=new Date(2026,mi,1), me=new Date(2026,mi+1,0);
+      if(c.contract_end   && new Date(c.contract_end)   < ms) continue;
+      if(c.contract_start && new Date(c.contract_start) > me) continue;
+    }
+    let d;
+    if(selectedMonth){
+      const rD=c.realized?.[selectedMonth]||0;
+      d = rD>0 ? getMonthData(c,selectedMonth,'realized') : getMonthData(c,selectedMonth,'planned');
+    } else {
+      // All months: sum using hybrid logic
+      d={days:0,cost_local:0,rev_local:0,cost_eur:0,rev_eur:0};
+      for(const m of MONTHS){
+        const rD=c.realized?.[m]||0, pD=c.planned?.[m]||0;
+        const md = rD>0?getMonthData(c,m,'realized'):pD>0?getMonthData(c,m,'planned'):null;
+        if(md){d.days+=md.days;d.cost_local+=md.cost_local;d.rev_local+=md.rev_local;d.cost_eur+=md.cost_eur;d.rev_eur+=md.rev_eur;}
+      }
+    }
+    const mg=d.rev_eur-d.cost_eur, pct=d.rev_eur>0?mg/d.rev_eur*100:0;
+    const costVal=c.cost_type==='monthly'?(c.cost_monthly||0):(c.cost_daily||0);
+    const revVal =c.rev_type==='monthly' ?(c.rev_monthly||0) :(c.rev_daily||0);
+    rows.push({i,c,d,mg,pct,costVal,revVal});
+  }
+
+  if(detailSortCol){
+    rows.sort((a,b)=>{
+      let va,vb;
+      if(detailSortCol==='name')      {va=a.c.name;       vb=b.c.name;}
+      else if(detailSortCol==='client')   {va=a.c.client;     vb=b.c.client;}
+      else if(detailSortCol==='role')     {va=a.c.role||'';   vb=b.c.role||'';}
+      else if(detailSortCol==='location') {va=a.c.location||'';vb=b.c.location||'';}
+      else if(detailSortCol==='company')  {va=a.c.company||''; vb=b.c.company||'';}
+      else if(detailSortCol==='days')     {va=a.d.days;        vb=b.d.days;}
+      else if(detailSortCol==='cost_rate'){va=a.costVal;       vb=b.costVal;}
+      else if(detailSortCol==='rev_rate') {va=a.revVal;        vb=b.revVal;}
+      else if(detailSortCol==='cost_cur') {va=a.c.cost_cur||'';vb=b.c.cost_cur||'';}
+      else if(detailSortCol==='rev_cur')  {va=a.c.rev_cur||''; vb=b.c.rev_cur||'';}
+      else if(detailSortCol==='rev')      {va=a.d.rev_eur;     vb=b.d.rev_eur;}
+      else if(detailSortCol==='cost')     {va=a.d.cost_eur;    vb=b.d.cost_eur;}
+      else if(detailSortCol==='margin')   {va=a.mg;            vb=b.mg;}
+      else if(detailSortCol==='pct')      {va=a.pct;           vb=b.pct;}
+      if(typeof va==='string') return detailSortDir*va.localeCompare(vb);
+      return detailSortDir*(va-vb);
+    });
+  }
+
+  const th=(col,label,num=false)=>thSort(SK,col,label,detailSortCol,num);
+  let tR=0,tC=0;
+  let h=`<thead><tr>
+    ${th('name','Consultant')}
+    ${th('client','Client')}
+    ${th('location','Location')}
+    ${th('company','Company')}
+    <th class="num">Revenue (local)</th>
+    <th class="num">Cost (local)</th>
+    ${th('rev','Revenue EUR',true)}
+    ${th('cost','Cost EUR',true)}
+    ${th('pct','Margin %',true)}
+    <th></th>
+  </tr></thead><tbody>`;
+
+  for(const {i,c,d,mg,pct} of rows){
+    tR+=d.rev_eur; tC+=d.cost_eur;
+    h+=`<tr>
+      <td><strong>${c.name}</strong></td>
+      <td class="neu">${c.client}</td>
+      <td class="neu" style="font-size:11px">${c.location||'—'}</td>
+      <td class="neu" style="font-size:11px">${c.company||'—'}</td>
+      <td class="num"><span class="neu" style="font-size:9px">${c.rev_type==='monthly'?'fixed/mo':'×d'}</span> ${d.rev_local>0?fmt(d.rev_local)+' <span class="badge badge-green" style="font-size:9px">'+c.rev_cur+'</span>':'—'}</td>
+      <td class="num"><span class="neu" style="font-size:9px">${c.cost_type==='monthly'?'fixed/mo':'×d'}</span> ${d.cost_local>0?fmt(d.cost_local)+' <span class="badge badge-blue" style="font-size:9px">'+c.cost_cur+'</span>':'—'}</td>
+      <td class="num pos">${fE(d.rev_eur)}</td>
+      <td class="num neg">${fE(d.cost_eur)}</td>
+      <td><span class="${mc(pct)}">${fmt(pct,1)}%</span></td>
+      <td><button class="btn btn-muted" style="padding:3px 8px;font-size:10px" onclick="openModal(${i})">✎</button></td>
+    </tr>`;
+  }
+  const tM=tR-tC, tP=tR>0?tM/tR*100:0;
+  h+=`<tr style="border-top:2px solid var(--border)">
+    <td colspan="6"><strong>Total (${rows.length} consultants)</strong>
+    </td>
+    <td class="pos"><strong>${fE(tR)}</strong></td>
+    <td class="neg"><strong>${fE(tC)}</strong></td>
+    <td><strong class="${mc(tP)}">${fmt(tP,1)}%</strong></td>
+    <td></td>
+  </tr></tbody>`;
+  document.getElementById('detail-table').innerHTML=h;
+}
+function initDetailFilters(){
+  if(!document.getElementById('d-filter-client')) return;
+  ['d-filter-client','d-filter-loc','d-filter-cur'].forEach(id=>{const s=document.getElementById(id);if(s){while(s.options.length>1)s.remove(1);}});
+  [...new Set(consultants.map(c=>c.client))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;document.getElementById('d-filter-client').appendChild(o);});
+  [...new Set(consultants.map(c=>c.location).filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;document.getElementById('d-filter-loc').appendChild(o);});
+  [...new Set(consultants.map(c=>c.rev_cur))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;document.getElementById('d-filter-cur').appendChild(o);});
+}
+
+function initConsultantFilters(){ initDetailFilters(); }  // merged into Monthly
+function renderConsultants(){ renderDetail(); }  // merged into Monthly
+
+// MODAL
+function populateCurrencySelects(){ rebuildAllCurrencies();
+  ['f-cost-cur','f-rev-cur'].forEach(id=>{
+    const s=document.getElementById(id),prev=s.value;s.innerHTML='';
+    ALL_CURRENCIES.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;s.appendChild(o);});
+    if(prev)s.value=prev;
+  });
+}
+function renderDaysGrid(c){
+  document.getElementById('days-grid').innerHTML=MONTHS.map((m,i)=>`
+    <div class="dg">
+      <div class="dl">${MONTHS_FR[i]}</div>
+      <input class="di" type="number" step="0.5" id="dp_${m}" value="${c.planned?.[m]??''}" placeholder="P" title="Planned">
+      <input class="di r" type="number" step="0.5" id="dr_${m}" value="${c.realized?.[m]??''}" placeholder="R" title="Realized">
+    </div>`).join('');
+}
+function setCostType(type,btn){
+  currentCostType=type;
+  document.querySelectorAll('#cost-type-toggle button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.getElementById('cost-monthly-group').style.display=type==='monthly'?'':'none';
+  document.getElementById('cost-daily-group').style.display=type==='daily'?'':'none';
+}
+function setRevType(type,btn){
+  currentRevType=type;
+  document.querySelectorAll('#rev-type-toggle button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.getElementById('rev-monthly-group').style.display=type==='monthly'?'':'none';
+  document.getElementById('rev-daily-group').style.display=type==='daily'?'':'none';
+}
+function openModal(idx){
+  editingIdx=idx;populateCurrencySelects();
+  if(idx===null){
+    document.getElementById('modal-title').textContent='Add consultant';
+    document.getElementById('modal-delete-btn').style.display='none';
+    ['f-name','f-client','f-contract','f-role','f-company','f-location','f-cost-month','f-cost-day','f-rev-month','f-rev-day','f-contract-start','f-contract-end'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('f-contract-category').value='Internal';
+    document.getElementById('f-contract-type').value='';
+    document.getElementById('f-cost-cur').value='SGD';document.getElementById('f-rev-cur').value='SGD';
+    setCostType('monthly',document.querySelector('#cost-type-toggle button:first-child'));
+    setRevType('daily',document.querySelectorAll('#rev-type-toggle button')[1]);
+    renderDaysGrid({});
+  }else{
+    const c=consultants[idx];
+    document.getElementById('modal-title').textContent='Edit — '+c.name;
+    document.getElementById('modal-delete-btn').style.display='';
+    document.getElementById('f-name').value=c.name||'';document.getElementById('f-client').value=c.client||'';
+    document.getElementById('f-contract').value=c.contract||'';document.getElementById('f-role').value=c.role||'';
+    document.getElementById('f-company').value=c.company||'';document.getElementById('f-location').value=c.location||'';
+    document.getElementById('f-contract-start').value=c.contract_start||'';
+    document.getElementById('f-contract-end').value=c.contract_end||'';
+    document.getElementById('f-contract-category').value=c.contract_category||'Internal';
+    document.getElementById('f-contract-type').value=c.contract_type||'';
+    document.getElementById('f-cost-month').value=c.cost_monthly||'';document.getElementById('f-cost-day').value=c.cost_daily||'';
+    document.getElementById('f-rev-month').value=c.rev_monthly||'';document.getElementById('f-rev-day').value=c.rev_daily||'';
+    document.getElementById('f-cost-cur').value=c.cost_cur||'SGD';document.getElementById('f-rev-cur').value=c.rev_cur||'SGD';
+    setCostType(c.cost_type||'monthly',document.querySelector(`#cost-type-toggle button:${c.cost_type==='daily'?'last':'first'}-child`));
+    setRevType(c.rev_type||'daily',document.querySelectorAll('#rev-type-toggle button')[c.rev_type==='monthly'?0:1]);
+    renderDaysGrid(c);
+  }
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function saveConsultant(){
+  const name=document.getElementById('f-name').value.trim();
+  if(!name){alert('Name is required.');return;}
+  const planned={},realized={};
+  for(const m of MONTHS){
+    const pv=parseFloat(document.getElementById('dp_'+m).value);
+    const rv=parseFloat(document.getElementById('dr_'+m).value);
+    planned[m]=isNaN(pv)?0:pv;
+    realized[m]=isNaN(rv)?0:rv;
+  }
+  const obj={name,client:document.getElementById('f-client').value.trim(),contract:document.getElementById('f-contract').value.trim(),
+    role:document.getElementById('f-role').value.trim(),company:document.getElementById('f-company').value.trim(),location:document.getElementById('f-location').value.trim(),
+    contract_start:document.getElementById('f-contract-start').value,
+    contract_end:document.getElementById('f-contract-end').value,
+    contract_category:document.getElementById('f-contract-category').value||'Internal',
+    contract_type:    document.getElementById('f-contract-type').value||'',
+    cost_type:currentCostType,cost_monthly:currentCostType==='monthly'?(parseFloat(document.getElementById('f-cost-month').value)||null):null,
+    cost_daily:currentCostType==='daily'?(parseFloat(document.getElementById('f-cost-day').value)||null):null,
+    cost_cur:document.getElementById('f-cost-cur').value,
+    rev_type:currentRevType,rev_monthly:currentRevType==='monthly'?(parseFloat(document.getElementById('f-rev-month').value)||null):null,
+    rev_daily:currentRevType==='daily'?(parseFloat(document.getElementById('f-rev-day').value)||null):null,
+    rev_cur:document.getElementById('f-rev-cur').value,planned,realized,
+    domain:   editingIdx!==null ? (consultants[editingIdx].domain   || '') : '',
+    industry: editingIdx!==null ? (consultants[editingIdx].industry || '') : '',
+  };
+  if(editingIdx===null)consultants.push(obj);else consultants[editingIdx]=obj;
+  saveData();closeModal();refreshAll();
+}
+function deleteConsultant(){
+  if(!confirm(`Delete "${consultants[editingIdx].name}"?`))return;
+  consultants.splice(editingIdx,1);saveData();closeModal();refreshAll();
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+function closeModalOutside(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
+
+// FX
+function fxPopulateAddDropdown(){
+  const sel = document.getElementById('fx-add-sel');
+  if(!sel) return;
+  const active = getActiveCurrencies();
+  sel.innerHTML = '<option value="">— Select a currency to add —</option>';
+  // Group: popular first, then rest alphabetically
+  const popular = ['CAD','CHF','CNY','KRW','TWD','THB','BRL','MXN','ZAR','TRY','AED','SAR','DKK','SEK','NOK','PLN'];
+  const all = Object.keys(CURRENCY_NAMES).filter(c=>c!=='EUR').sort((a,b)=>a.localeCompare(b));
+  const addOpt = (code)=>{
+    if(active.includes(code)) return;
+    const o=document.createElement('option');
+    o.value=code;
+    o.textContent=`${code}  —  ${CURRENCY_NAMES[code]||code}`;
+    sel.appendChild(o);
+  };
+  // Popular group
+  const og1=document.createElement('optgroup'); og1.label='Popular currencies';
+  popular.forEach(c=>{ if(!active.includes(c)&&CURRENCY_NAMES[c]){ const o=document.createElement('option');o.value=c;o.textContent=`${c}  —  ${CURRENCY_NAMES[c]}`;og1.appendChild(o); } });
+  if(og1.children.length) sel.appendChild(og1);
+  // All others
+  const og2=document.createElement('optgroup'); og2.label='All currencies';
+  all.forEach(c=>{ if(!active.includes(c)&&!popular.includes(c)&&CURRENCY_NAMES[c]){ const o=document.createElement('option');o.value=c;o.textContent=`${c}  —  ${CURRENCY_NAMES[c]}`;og2.appendChild(o); } });
+  if(og2.children.length) sel.appendChild(og2);
+}
+function fxAddCurrency(){
+  const sel=document.getElementById('fx-add-sel');
+  const code=sel?.value; if(!code) return;
+  const active=getActiveCurrencies();
+  if(active.includes(code)){sel.value='';return;}
+  active.push(code);
+  setActiveCurrencies(active);
+  rebuildAllCurrencies();
+  renderFXPanel();
+  sel.value='';
+}
+function fxRemoveCurrency(code){
+  if(!confirm(`Remove ${code} (${CURRENCY_NAMES[code]||code}) from the exchange rate table?`)) return;
+  const active=getActiveCurrencies().filter(c=>c!==code);
+  setActiveCurrencies(active);
+  rebuildAllCurrencies();
+  renderFXPanel();
+}
+function renderFXPanel(){
+  rebuildAllCurrencies();
+  fxPopulateAddDropdown();
+  const currencies = ALL_CURRENCIES.filter(c=>c!=='EUR');
+  const MON=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  let html = `<thead><tr>
+    <th class="fx-cur-col" style="width:90px">EUR →</th>
+    ${MON.map(m=>`<th style="width:88px">${m}</th>`).join('')}
+    <th style="width:32px"></th>
+  </tr></thead><tbody>`;
+  for(const cur of currencies){
+    html += `<tr><td class="fx-cur-cell" style="white-space:nowrap"><span style="font-weight:700">${cur}</span><br><span style="font-size:9px;color:var(--muted);font-weight:400">${CURRENCY_NAMES[cur]||''}</span></td>`;
+    for(const m of MONTHS){
+      const raw = FX[cur]?.[m]??DEFAULT_RATES[cur]??1;
+      const val = parseFloat(raw.toFixed(6)).toString();
+      html += `<td><input class="fx-input" type="text" inputmode="decimal" id="fx_${cur}_${m}" value="${val}" onblur="fxBlur(this)"></td>`;
+    }
+    html += `<td style="text-align:center"><button onclick="fxRemoveCurrency('${cur}')" title="Remove ${cur}" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:2px 4px;line-height:1;opacity:.6" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.6">✕</button></td>`;
+    html += `</tr>`;
+  }
+  html += `</tbody>`;
+  document.getElementById('fx-grid').innerHTML = html;
+}
+function fxBlur(el){
+  const raw = el.value.replace(/\s/g,'').replace(',','.');
+  const v = parseFloat(raw);
+  if(isNaN(v) || v <= 0){ el.value = el.dataset.prev || '1'; return; }
+  // Strip unnecessary trailing zeros but keep precision
+  el.value = parseFloat(v.toFixed(6)).toString();
+  el.dataset.prev = el.value;
+}
+function saveFX(){
+  for(const cur of ALL_CURRENCIES.filter(c=>c!=='EUR')){
+    if(!FX[cur])FX[cur]={};
+    for(const m of MONTHS){
+      const el=document.getElementById(`fx_${cur}_${m}`);
+      if(el){
+        const raw=el.value.replace(/\s/g,'').replace(',','.');
+        const v=parseFloat(raw);
+        if(!isNaN(v)&&v>0)FX[cur][m]=v;
+      }
+    }
+  }
+  saveData();refreshAll();
+  alert('✓ Rates saved — calculations updated.');
+}
+
+
+// BACKLOG IMPORT
+function importBacklogExcel(input){
+  const file = input.files[0];
+  if(!file) return;
+  const info = document.getElementById('backlog-import-info');
+  info.innerHTML = '⏳ Reading file…';
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const wb = XLSX.read(e.target.result, {type:'array', cellDates:true});
+      const sheetNames = wb.SheetNames;
+
+      // Find Contracts sheet
+      const cSheet = sheetNames.find(s => /contract/i.test(s) && !/consultant/i.test(s));
+      if(!cSheet){ info.innerHTML='<span style="color:var(--red)">❌ No Contracts sheet found.</span>'; return; }
+
+      const ws = wb.Sheets[cSheet];
+      const rows = XLSX.utils.sheet_to_json(ws, {defval:null, raw:false});
+      if(!rows.length){ info.innerHTML='<span style="color:var(--red)">❌ Contracts sheet is empty.</span>'; return; }
+
+      const h = Object.keys(rows[0]);
+      const n2 = s => s.toLowerCase().replace(/[\s_]/g,'');
+      const cCol = pats => h.find(hh => pats.some(p => n2(hh)===n2(p))) || h.find(hh => pats.some(p => n2(hh).includes(n2(p)) && n2(p).length>=4)) || null;
+
+      const nameCol  = cCol(['contractname','contract_name']);
+      const totalCol = cCol(['totalamountofthecontract','totalamount','montanttotal','total']);
+      const curCol   = cCol(['currency','devise']);
+      const startCol = cCol(['startdate','start_date']);
+      const endCol   = cCol(['enddate','end_date']);
+      const catCol   = cCol(['category','categorie']);
+
+      if(!nameCol){ info.innerHTML='<span style="color:var(--red)">❌ Cannot find Contract Name column.</span>'; return; }
+
+      // Build map contract name → {total, cur, start, end}
+      const cmap = {};
+      for(const r of rows){
+        const name = (r[nameCol]||'').toString().trim();
+        if(!name) continue;
+        const parseDate = v => { if(!v) return ''; const d=new Date(v); return isNaN(d)?'':d.toISOString().slice(0,10); };
+        cmap[name] = {
+          contract_total: totalCol ? (parseFloat(r[totalCol])||0) : 0,
+          contract_cur:   curCol   ? (r[curCol]||'').toString().trim() : '',
+          contract_start: startCol ? parseDate(r[startCol]) : '',
+          contract_end:   endCol   ? parseDate(r[endCol])   : '',
+          contract_category: (catCol?r[catCol]:'').toString().trim() || 'Internal',
+          contract_type: (r['Contract Type'] || r['Type'] || '').toString().trim(),
+        };
+      }
+
+      // Update matching consultants
+      let updated = 0;
+      for(const c of consultants){
+        const cd = cmap[c.contract];
+        if(cd){
+          c.contract_total    = cd.contract_total;
+          c.contract_cur      = cd.contract_cur;
+          c.contract_category = cd.contract_category;
+          if(cd.contract_start) c.contract_start = cd.contract_start;
+          if(cd.contract_end)   c.contract_end   = cd.contract_end;
+          updated++;
+        }
+      }
+
+      saveData();
+      renderBacklog();
+      info.innerHTML = `<span style="color:var(--accent)">✓ ${Object.keys(cmap).length} contracts imported from <strong>${file.name}</strong> · ${updated} consultants updated.</span>`;
+      input.value = '';
+    } catch(err){
+      info.innerHTML = `<span style="color:var(--red)">❌ Error reading file: ${err.message}</span>`;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+let backlogSortCol=null,backlogSortDir=1;
+window.renderBySort_backlog=col=>{if(backlogSortCol===col)backlogSortDir*=-1;else{backlogSortCol=col;backlogSortDir=1;}renderBacklog();};
+function renderBacklogKPIs(){
+  const el = document.getElementById('backlog-kpis');
+  if(!el) return;
+  const BUDGET = 3000000;
+  let totPlanned_yr=0, totRealized_yr=0;
+  for(const c of consultants){
+    for(const m of MONTHS){
+      const rDays = c.realized?.[m]||0;
+      const pDays = c.planned?.[m]||0;
+      if(rDays>0) totRealized_yr += getMonthData(c,m,'realized').rev_eur;
+      else if(pDays>0) totPlanned_yr += getMonthData(c,m,'planned').rev_eur;
+    }
+  }
+  const totBacklog  = totPlanned_yr;
+  const pctSigned   = BUDGET>0 ? totBacklog/BUDGET*100 : 0;
+  const pctRealized = totBacklog>0 ? totRealized_yr/totBacklog*100 : 0;
+  const remaining   = totPlanned_yr - totRealized_yr;
+  el.innerHTML=`
+    <div class="kpi b"><div class="kpi-label">Total Backlog</div><div class="kpi-value b">${fE(totBacklog)}</div><div class="kpi-sub">planned · full year</div></div>
+    <div class="kpi y"><div class="kpi-label">Realized</div><div class="kpi-value y">${fE(totRealized_yr)}</div><div class="kpi-sub">${totBacklog>0?fmt(totRealized_yr/totBacklog*100,1):'—'}% of backlog</div></div>
+    <div class="kpi ${pctSigned>=100?'g':pctSigned>=70?'y':'r'}"><div class="kpi-label">% Signed vs Budget</div><div class="kpi-value ${pctSigned>=100?'g':pctSigned>=70?'y':'r'}">${fmt(pctSigned,1)}%</div><div class="kpi-sub">backlog vs €3M budget</div></div>
+    <div class="kpi"><div class="kpi-label">Remaining</div><div class="kpi-value neu">${fE(remaining)}</div><div class="kpi-sub">${fmt(pctRealized,1)}% realized</div></div>`;
+}
+
+function renderBacklogStrip(){ /* strip removed — backlog now uses dash month strip */ }
+function setBacklogMonth(m){ backlogMonth=m; renderBacklog(); }
+
+function initBacklogFilters(){
+  if(!document.getElementById('bl-client')) return;
+  const bl = document.getElementById('bl-client');
+  if(!bl) return;
+  while(bl.options.length>1) bl.remove(1);
+  [...new Set(consultants.map(c=>c.client))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;bl.appendChild(o);});
+}
+
+
+function renderBacklog(){
+  renderBacklogStrip();
+  initBacklogFilters();
+  const months = dashMonth ? [dashMonth] : MONTHS;
+  const isYear = dashMonth === null;
+  const mLabel = dashMonth ? MONTHS_FR[MONTHS.indexOf(dashMonth)] : '';
+  const BUDGET = 3000000;
+
+  // Read filters
+  const qEl = document.getElementById('bl-search');
+  const cfEl = document.getElementById('bl-client');
+  const catEl = document.getElementById('bl-cat');
+  const q   = qEl   ? qEl.value.toLowerCase()   : '';
+  const cf  = cfEl  ? cfEl.value                : '';
+  const cat = catEl ? catEl.value               : '';
+
+  const contracts = {};
+  for(const c of consultants){
+    // Apply filters
+    if(cf  && c.client !== cf) continue;
+    if(cat && (c.contract_category||'Internal') !== cat) continue;
+    if(q   && !c.name.toLowerCase().includes(q) && !c.contract.toLowerCase().includes(q) && !c.client.toLowerCase().includes(q)) continue;
+
+    const key = c.contract || '(no contract)';
+    if(!contracts[key]){
+      const cur       = (c.contract_cur || '').trim();
+      const total     = c.contract_total || 0;
+      const total_eur = (total > 0 && cur) ? toEUR(total, cur, 'January') : total;
+      contracts[key] = {
+        contract:       key,
+        client:         c.client,
+        consultants:    [],
+        category:       c.contract_category || 'Internal',
+        contract_start: c.contract_start || '',
+        contract_end:   c.contract_end   || '',
+        contract_total: total,
+        contract_cur:   cur,
+        total_eur,
+        planned:        0,  // for selected month(s)
+        realized:       0,  // for selected month(s)
+        planned_yr:     0,  // always full year
+        realized_yr:    0,  // always full year
+      };
+    }
+    if(!contracts[key].consultants.includes(c.name))
+      contracts[key].consultants.push(c.name);
+
+    // Selected period
+    for(const m of months){
+      contracts[key].planned  += getMonthData(c, m, 'planned').rev_eur;
+      contracts[key].realized += getMonthData(c, m, 'realized').rev_eur;
+    }
+    // Backlog = planned only, and only for months where realized = 0
+    // If a month has realized data → it's confirmed, excluded from backlog
+    for(const m of MONTHS){
+      const rDays = c.realized?.[m] || 0;
+      const pDays = c.planned?.[m]  || 0;
+      if(rDays > 0){
+        contracts[key].realized_yr += getMonthData(c, m, 'realized').rev_eur;
+      } else if(pDays > 0){
+        contracts[key].planned_yr  += getMonthData(c, m, 'planned').rev_eur;
+      }
+    }
+  }
+
+  const rows = Object.values(contracts);
+  let totPlanned = 0, totRealized = 0, totPlanned_yr = 0, totRealized_yr = 0;
+  for(const r of rows){
+    totPlanned    += r.planned;
+    totRealized   += r.realized;
+    totPlanned_yr += r.planned_yr;
+    totRealized_yr+= r.realized_yr;
+  }
+
+  // Total Backlog = planned only. Realized is separate.
+  const totBacklog   = totPlanned_yr;
+  const totRemaining = totPlanned_yr - totRealized_yr;
+  const pctSigned    = BUDGET > 0 ? totBacklog / BUDGET * 100 : 0;
+  const pctRealized  = totBacklog > 0 ? totRealized_yr / totBacklog * 100 : 0;
+
+  let html = `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px">
+      <div class="kpi b"><div class="kpi-label">Total Backlog</div><div class="kpi-value b">${fE(totBacklog)}</div><div class="kpi-sub">planned · full year</div></div>
+      <div class="kpi y"><div class="kpi-label">Realized${isYear?'':' · '+mLabel}</div><div class="kpi-value y">${fE(totRealized)}</div><div class="kpi-sub">${totBacklog>0?fmt(totRealized_yr/totBacklog*100,1):'—'}% of backlog · confirmed</div></div>
+      <div class="kpi" style="border-color:var(--accent)"><div class="kpi-label">% Signed vs Budget</div><div class="kpi-value ${pctSigned>=100?'g':pctSigned>=70?'y':'r'}">${fmt(pctSigned,1)}%</div><div class="kpi-sub">backlog vs €3M budget</div></div>
+      <div class="kpi r"><div class="kpi-label">% Realized</div>
+        <div style="margin-top:4px"><div class="mbar"><div class="bar-track" style="flex:1"><div class="bar-fill" style="width:${Math.min(100,pctRealized).toFixed(1)}%;background:${pctRealized>=75?'var(--accent)':pctRealized>=40?'var(--yellow)':'var(--blue)'}"></div></div><span class="${pctRealized>=75?'pos':pctRealized>=40?'y':'neu'}" style="font-size:13px;font-weight:700;width:52px;text-align:right">${fmt(pctRealized,1)}%</span></div></div>
+        <div class="kpi-sub">realized vs total backlog</div></div>
+    </div>
+  `;
+  // sort
+  if(backlogSortCol){
+    rows.sort((a,b)=>{
+      let va,vb;
+      const dir = backlogSortDir;
+      const aBacklog = a.planned_yr;
+      const bBacklog = b.planned_yr;
+      if(backlogSortCol==='contract')      {va=a.contract;vb=b.contract;}
+      else if(backlogSortCol==='client')   {va=a.client;vb=b.client;}
+      else if(backlogSortCol==='backlog')  {va=aBacklog;vb=bBacklog;}
+      else if(backlogSortCol==='planned')  {va=a.planned;vb=b.planned;}
+      else if(backlogSortCol==='realized') {va=a.realized;vb=b.realized;}
+      else if(backlogSortCol==='remaining'){va=aBacklog-a.realized_yr;vb=bBacklog-b.realized_yr;}
+      else if(backlogSortCol==='pct')      {va=aBacklog>0?a.realized_yr/aBacklog:0;vb=bBacklog>0?b.realized_yr/bBacklog:0;}
+      if(typeof va==='string') return dir*va.localeCompare(vb);
+      return dir*(va-vb);
+    });
+  }
+  const thB=(col,label,num=false)=>thSort('backlog',col,label,backlogSortCol,num);
+  html += `<div class="card"><div class="table-wrap"><table>
+      <thead><tr>
+        ${thB('contract','Contract')}${thB('client','Client')}<th>Consultants</th>
+        ${thB('backlog','Total Backlog EUR',true)}
+        ${thB('realized',isYear?'Realized EUR':'Realized · '+mLabel,true)}
+        ${thB('remaining','Remaining EUR',true)}
+        ${thB('pct','% Realized',true)}
+      </tr></thead><tbody>`;
+
+  for(const r of rows){
+    const rowBacklog  = r.planned_yr;
+    const remaining   = r.planned_yr - r.realized_yr;
+    const pctReal     = rowBacklog > 0 ? Math.min(100, r.realized_yr / rowBacklog * 100) : 0;
+    const pctPlan     = rowBacklog > 0 ? Math.min(100, r.planned_yr  / rowBacklog * 100) : 0;
+    const color       = pctReal >= 75 ? 'var(--accent)' : pctReal >= 40 ? 'var(--yellow)' : 'var(--blue)';
+    html += `<tr>
+      <td><strong>${r.contract}</strong></td>
+      <td class="neu">${r.client}</td>
+      <td class="neu" style="font-size:11px">${r.consultants.join(', ')}</td>
+      <td class="num pos">${fE(rowBacklog)}</td>
+      <td class="num" style="color:var(--blue)">${fE(r.realized)}</td>
+      <td class="num ${remaining>=0?'neu':'neg'}">${fE(remaining)}</td>
+      <td>
+        <div class="mbar">
+          <div class="bar-track" style="flex:1;position:relative">
+            <div style="position:absolute;top:0;left:0;height:100%;width:${pctPlan.toFixed(1)}%;background:rgba(79,255,176,.25);border-radius:3px"></div>
+            <div class="bar-fill" style="width:${pctReal.toFixed(1)}%;background:${color}"></div>
+          </div>
+          <span style="font-size:11px;width:38px;text-align:right;color:${color}">${pctReal.toFixed(0)}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }
+
+  html += `<tr style="border-top:2px solid var(--border)">
+    <td colspan="3"><strong>Total</strong></td>
+    <td class="pos"><strong>${fE(totBacklog)}</strong></td>
+    <td class="num" style="color:var(--blue)"><strong>${fE(totRealized)}</strong></td>
+    <td class="num neu"><strong>${fE(totRemaining)}</strong></td>
+    <td><strong style="font-size:11px;color:${pctRealized>=75?'var(--accent)':pctRealized>=40?'var(--yellow)':'var(--blue)'}">${fmt(pctRealized,1)}%</strong></td>
+  </tr>`;
+
+  html += `</tbody></table></div></div>`;
+  document.getElementById('backlog-content').innerHTML = html;
+}
+
+// NAV
+
+// ── EXCEL EXPORT ─────────────────────────────────────────────────────────────
+function exportToExcel(){
+  const wb = XLSX.utils.book_new();
+  const MS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const n2 = v => typeof v==='number' ? Math.round(v*100)/100 : (v??'');
+  const pct = (a,b) => b>0 ? n2(a/b*100) : 0;
+
+  function autoWidth(ws, data){
+    if(!data.length) return;
+    const keys = Object.keys(data[0]);
+    ws['!cols'] = keys.map(k=>({
+      wch: Math.min(40, Math.max(k.length+2, ...data.map(r=>String(r[k]??'').length)))
+    }));
+    if(ws['!ref']) ws['!autofilter'] = {ref: ws['!ref']};
+  }
+
+  // hybrid revenue: realized if realized_days>0, planned otherwise
+  function hybridRev(c, mo){ const rD=c.realized?.[mo]||0,pD=c.planned?.[mo]||0; return rD>0?getMonthData(c,mo,'realized'):pD>0?getMonthData(c,mo,'planned'):null; }
+
+  // build a breakdown map keyed by keyFn
+  function buildMap(keyFn){
+    const m={};
+    const months = dashMonth?[dashMonth]:MONTHS;
+    for(const c of consultants){
+      const key=keyFn(c)||'—';
+      if(!m[key])m[key]={rev:0,cost:0};
+      for(const mo of months){ const d=hybridRev(c,mo); if(d){m[key].rev+=d.rev_eur;m[key].cost+=d.cost_eur;} }
+    }
+    return m;
+  }
+
+  function breakdownRows(map, labelKey){
+    const rows = Object.entries(map).sort((a,b)=>b[1].rev-a[1].rev);
+    const totalRev = rows.reduce((s,[,v])=>s+v.rev,0);
+    const out = rows.map(([key,v])=>({
+      [labelKey]:         key,
+      'Revenue EUR':      n2(v.rev),
+      'Business %':       n2(totalRev>0?v.rev/totalRev*100:0),
+      'Cost EUR':         n2(v.cost),
+      'Margin EUR':       n2(v.rev-v.cost),
+      'Margin %':         n2(v.rev>0?(v.rev-v.cost)/v.rev*100:0),
+    }));
+    const tR=rows.reduce((s,[,v])=>s+v.rev,0), tC=rows.reduce((s,[,v])=>s+v.cost,0);
+    out.push({[labelKey]:'TOTAL','Revenue EUR':n2(tR),'Business %':100,'Cost EUR':n2(tC),'Margin EUR':n2(tR-tC),'Margin %':n2(tR>0?(tR-tC)/tR*100:0)});
+    return out;
+  }
+
+  const periodLabel = dashMonth ? dashMonth : 'Full Year';
+
+  // ── 1. DASHBOARD — Revenue by Client ─────────────────────────────────────
+  const dbRows = breakdownRows(buildMap(c=>c.client), 'Client');
+  const wsDash = XLSX.utils.json_to_sheet(dbRows);
+  autoWidth(wsDash, dbRows);
+  XLSX.utils.book_append_sheet(wb, wsDash, 'By Client');
+
+  // ── 2. DASHBOARD — Revenue by Industry ───────────────────────────────────
+  const indRows = breakdownRows(buildMap(c=>c.industry||'—'), 'Industry');
+  const wsInd = XLSX.utils.json_to_sheet(indRows);
+  autoWidth(wsInd, indRows);
+  XLSX.utils.book_append_sheet(wb, wsInd, 'By Industry');
+
+  // ── 3. DASHBOARD — Revenue by Region ─────────────────────────────────────
+  const regRows = breakdownRows(buildMap(c=>c.location||'—'), 'Region');
+  const wsReg = XLSX.utils.json_to_sheet(regRows);
+  autoWidth(wsReg, regRows);
+  XLSX.utils.book_append_sheet(wb, wsReg, 'By Region');
+
+  // ── 4. DASHBOARD — Revenue by Domain ─────────────────────────────────────
+  const domRows = breakdownRows(buildMap(c=>c.domain||'—'), 'Domain');
+  const wsDom = XLSX.utils.json_to_sheet(domRows);
+  autoWidth(wsDom, domRows);
+  XLSX.utils.book_append_sheet(wb, wsDom, 'By Domain');
+
+  // ── 5. DASHBOARD — Revenue by Category ───────────────────────────────────
+  const catRows = breakdownRows(buildMap(c=>c.contract_category||'—'), 'Category');
+  const wsCat = XLSX.utils.json_to_sheet(catRows);
+  autoWidth(wsCat, catRows);
+  XLSX.utils.book_append_sheet(wb, wsCat, 'By Category');
+
+  // ── 6. DASHBOARD — Revenue by Contract Type ───────────────────────────────
+  const ctRows = breakdownRows(buildMap(c=>c.contract_type||'—'), 'Contract Type');
+  const wsCT = XLSX.utils.json_to_sheet(ctRows);
+  autoWidth(wsCT, ctRows);
+  XLSX.utils.book_append_sheet(wb, wsCT, 'By Contract Type');
+
+  // ── 7. TEAMS — one row per consultant×month ───────────────────────────────
+  const teamRows = [];
+  for(const c of consultants){
+    for(const m of MONTHS){
+      const dp = getMonthData(c, m, 'planned');
+      const dr = getMonthData(c, m, 'realized');
+      if(!dp.days && !dr.days) continue;
+      teamRows.push({
+        Month:                m,
+        Type:                 'Consultant',
+        Consultant:           c.name,
+        Client:               c.client,
+        Contract:             c.contract,
+        Category:             c.contract_category||'',
+        'Contract Type':      c.contract_type||'',
+        Role:                 c.role||'',
+        Domain:               c.domain||'',
+        Industry:             c.industry||'',
+        Location:             c.location||'',
+        Company:              c.company||'',
+        'Days Planned':       n2(dp.days),
+        'Days Realized':      n2(dr.days),
+        'Rev Currency':       c.rev_cur,
+        'Rev Local Planned':  n2(dp.rev_local),
+        'Rev Local Realized': n2(dr.rev_local),
+        'Rev EUR Planned':    n2(dp.rev_eur),
+        'Rev EUR Realized':   n2(dr.rev_eur),
+        'Cost EUR Planned':   n2(dp.cost_eur),
+        'Cost EUR Realized':  n2(dr.cost_eur),
+        'Margin EUR Planned': n2(dp.rev_eur - dp.cost_eur),
+        'Margin EUR Realized':n2(dr.rev_eur - dr.cost_eur),
+      });
+    }
+  }
+  const wsTeam = XLSX.utils.json_to_sheet(teamRows);
+  autoWidth(wsTeam, teamRows);
+  XLSX.utils.book_append_sheet(wb, wsTeam, 'Teams');
+
+  // ── 8. BACKLOG ────────────────────────────────────────────────────────────
+  const blMap = {};
+  for(const c of consultants){
+    const key = c.contract || '(no contract)';
+    if(!blMap[key]){
+      const cur=c.contract_cur||'', total=c.contract_total||0;
+      blMap[key]={contract:c.contract,client:c.client,category:c.contract_category||'Internal',
+        contract_type:c.contract_type||'',consultants:[],
+        contract_start:c.contract_start||'',contract_end:c.contract_end||'',
+        realized_yr:0,planned_yr:0};
+    }
+    if(!blMap[key].consultants.includes(c.name)) blMap[key].consultants.push(c.name);
+    for(const m of MONTHS){
+      const rDays=c.realized?.[m]||0, pDays=c.planned?.[m]||0;
+      if(rDays>0)      blMap[key].realized_yr += getMonthData(c,m,'realized').rev_eur;
+      else if(pDays>0) blMap[key].planned_yr  += getMonthData(c,m,'planned').rev_eur;
+    }
+  }
+  const blRows=[];
+  let bTotBacklog=0, bTotRealized=0;
+  for(const r of Object.values(blMap)){
+    bTotBacklog+=r.planned_yr; bTotRealized+=r.realized_yr;
+    blRows.push({Contract:r.contract,Client:r.client,Category:r.category,'Contract Type':r.contract_type,
+      Consultants:r.consultants.join(', '),'Start Date':r.contract_start,'End Date':r.contract_end,
+      'Total Backlog EUR':n2(r.planned_yr),'Realized EUR':n2(r.realized_yr),
+      'Remaining EUR':n2(r.planned_yr-r.realized_yr),'% Realized':pct(r.realized_yr,r.planned_yr)});
+  }
+  blRows.push({Contract:'TOTAL',Client:'',Category:'','Contract Type':'',Consultants:'','Start Date':'','End Date':'',
+    'Total Backlog EUR':n2(bTotBacklog),'Realized EUR':n2(bTotRealized),
+    'Remaining EUR':n2(bTotBacklog-bTotRealized),'% Realized':pct(bTotRealized,bTotBacklog)});
+  const wsBacklog = XLSX.utils.json_to_sheet(blRows);
+  autoWidth(wsBacklog, blRows);
+  XLSX.utils.book_append_sheet(wb, wsBacklog, 'Backlog');
+
+  // ── 9. MASTER DATA ────────────────────────────────────────────────────────
+  const mdRows = consultants.map(c=>({
+    Name:                c.name,
+    Client:              c.client,
+    Contract:            c.contract,
+    Category:            c.contract_category||'',
+    'Contract Type':     c.contract_type||'',
+    Role:                c.role||'',
+    Domain:              c.domain||'',
+    Industry:            c.industry||'',
+    Location:            c.location||'',
+    Company:             c.company||'',
+    'Contract Start':    c.contract_start||'',
+    'Contract End':      c.contract_end||'',
+    'Rev Type':          c.rev_type,
+    'Rev Rate':          c.rev_type==='monthly'?c.rev_monthly:c.rev_daily,
+    'Rev Currency':      c.rev_cur,
+    'Cost Type':         c.cost_type,
+    'Cost Rate':         c.cost_type==='monthly'?c.cost_monthly:c.cost_daily,
+    'Cost Currency':     c.cost_cur,
+    'Contract Total':    c.contract_total||0,
+    'Contract Currency': c.contract_cur||'',
+  }));
+  const wsMD = XLSX.utils.json_to_sheet(mdRows);
+  autoWidth(wsMD, mdRows);
+  XLSX.utils.book_append_sheet(wb, wsMD, 'Master Data');
+
+  // ── 10. DAYS ──────────────────────────────────────────────────────────────
+  const daysRows = consultants.map(c=>{
+    const row={Consultant:c.name,Client:c.client,Contract:c.contract};
+    MONTHS.forEach((m,i)=>{ row[MS[i]+' Plan']=c.planned?.[m]||0; row[MS[i]+' Real']=c.realized?.[m]||0; });
+    return row;
+  });
+  const wsDays = XLSX.utils.json_to_sheet(daysRows);
+  autoWidth(wsDays, daysRows);
+  XLSX.utils.book_append_sheet(wb, wsDays, 'Days');
+
+  // ── 12. EXCHANGE RATES ────────────────────────────────────────────────────
+  const fxRows = ALL_CURRENCIES.filter(c=>c!=='EUR').map(cur=>{
+    const row={Currency:cur,Name:CURRENCY_NAMES[cur]||cur};
+    MONTHS.forEach((m,i)=>{ row[MS[i]]=n2(FX[cur]?.[m]??DEFAULT_RATES[cur]??1); });
+    return row;
+  });
+  const wsFX = XLSX.utils.json_to_sheet(fxRows);
+  autoWidth(wsFX, fxRows);
+  XLSX.utils.book_append_sheet(wb, wsFX, 'Exchange Rates');
+
+  // ── Download ──────────────────────────────────────────────────────────────
+  const date = new Date().toISOString().slice(0,10);
+  XLSX.writeFile(wb, `Keyrus_Forecast_${date}_${periodLabel.replace(' ','_')}.xlsx`);
+}
+
+
+
+// ── MISC ADJUSTMENTS ──────────────────────────────────────────────────────
+
+// ── INVOICE TAB ──────────────────────────────────────────────────────────────
+let invoiceMonth = 'January';
+// Manual overrides stored per consultant×month: {month: {consultantName: {invoiceNumber, comment, manualExcl}}}
+let invoiceOverrides = {};
+const INV_STORAGE_KEY = 'invoiceOverrides_v2';
+const INV_LOCK_KEY    = 'invoiceLocked_v1';
+let invoiceLocked = {};  // { month: true/false }
+
+function loadInvoiceLock(){ try{ const s=localStorage.getItem(INV_LOCK_KEY); if(s) invoiceLocked=JSON.parse(s); }catch(e){} }
+function saveInvoiceLock(){ try{ localStorage.setItem(INV_LOCK_KEY,JSON.stringify(invoiceLocked)); }catch(e){} }
+function isInvoiceLocked(){ return !!(invoiceLocked[invoiceMonth]); }
+
+function invoiceSave(){
+  invoiceLocked[invoiceMonth]=true;
+  saveInvoiceLock();
+  renderInvoice();
+}
+function invoiceCancel(){
+  invoiceLocked[invoiceMonth]=false;
+  saveInvoiceLock();
+  renderInvoice();
+}
+
+function loadInvoiceData(){
+  try{ const s=localStorage.getItem(INV_STORAGE_KEY); if(s) invoiceOverrides=JSON.parse(s); }catch(e){}
+  loadInvoiceLock();
+}
+function saveInvoiceData(){
+  try{ localStorage.setItem(INV_STORAGE_KEY, JSON.stringify(invoiceOverrides)); }catch(e){}
+}
+function getOverride(month, name){ return (invoiceOverrides[month]||{})[name]||{}; }
+function setOverride(month, name, field, value){
+  if(!invoiceOverrides[month]) invoiceOverrides[month]={};
+  if(!invoiceOverrides[month][name]) invoiceOverrides[month][name]={};
+  invoiceOverrides[month][name][field]=value;
+  saveInvoiceData();
+}
+
+// ── Manual lines (+ Add on invoice) ─────────────────────────────────────────
+function getManualLines(month){ return invoiceOverrides[month]?.__manualLines || []; }
+function saveManualLines(month, lines){
+  if(!invoiceOverrides[month]) invoiceOverrides[month]={};
+  invoiceOverrides[month].__manualLines = lines;
+  saveInvoiceData();
+}
+function invAddLine(){
+  const lines = getManualLines(invoiceMonth);
+  lines.push({id:'ml_'+Date.now(), client:'', name:'', cur:'EUR', exclAmt:0, costLocal:0, costCur:'EUR', invoiceNumber:'', gstEnabled:false});
+  saveManualLines(invoiceMonth, lines);
+  renderInvoice();
+}
+function invDeleteLine(id){
+  const lines = getManualLines(invoiceMonth).filter(l=>l.id!==id);
+  saveManualLines(invoiceMonth, lines);
+  renderInvoice();
+}
+function invUpdateLine(id, field, value){
+  const lines = getManualLines(invoiceMonth);
+  const l = lines.find(l=>l.id===id);
+  if(!l) return;
+  if(field==='exclAmt'||field==='costLocal') l[field]=parseFloat(value)||0;
+  else if(field==='gstEnabled') l[field]=!!value;
+  else l[field]=value;
+  saveManualLines(invoiceMonth, lines);
+}
+
+function getGSTRate(cur){ return cur==='SGD' ? 0.09 : 0; }
+
+function getInvoiceRows(month){
+  const rows=[];
+  for(const c of consultants){
+    const rDays = c.realized?.[month]||0;
+    const pDays = c.planned?.[month]||0;
+    // Use realized if available, else planned
+    const days = rDays>0 ? rDays : pDays;
+    if(!days) continue;
+
+    const isRealized = rDays>0;
+    let revLocal = c.rev_type==='monthly' ? (c.rev_monthly||0) : (c.rev_daily||0)*days;
+    const cur      = c.rev_cur||'SGD';
+    const gstRate  = getGSTRate(cur);
+    const ov       = getOverride(month, c.name);
+    const exclAmt  = ov.manualRev!==undefined ? parseFloat(ov.manualRev)||0 : revLocal;
+    const gst      = exclAmt * gstRate;
+    const inclAmt  = exclAmt + gst;
+
+    const costCur      = c.cost_cur||'SGD';
+    const costLocalBase = c.cost_type==='monthly' ? (c.cost_monthly||0) : (c.cost_daily||0)*days;
+    const costLocal    = ov.manualCost!==undefined ? parseFloat(ov.manualCost)||0 : costLocalBase;
+    const costEUR      = toEUR(costLocal, costCur, month);
+    const revEUR       = toEUR(exclAmt, cur, month);
+
+    rows.push({
+      client: ov.manualClient!==undefined ? ov.manualClient : c.client,
+      name:   ov.manualName!==undefined   ? ov.manualName   : c.name,
+      contract: c.contract||'',
+      days, isRealized,
+      rev_type: c.rev_type, rate: c.rev_type==='monthly'?c.rev_monthly:c.rev_daily,
+      exclAmt, gstRate, gst, inclAmt, cur,
+      costLocal, costCur, costEUR, revEUR,
+      invoiceNumber: ov.invoiceNumber||'',
+      comment:       ov.comment||'',
+      mergedWith:    ov.mergedWith||'',
+      isMergeTarget: ov.isMergeTarget||false,
+    });
+  }
+  rows.sort((a,b)=>a.client.localeCompare(b.client)||a.name.localeCompare(b.name));
+  // Append manual lines added via + Add
+  for(const l of getManualLines(month)){
+    const gstRate = getGSTRate(l.cur||'EUR');
+    const gstEnabled = l.gstEnabled !== undefined ? l.gstEnabled : (gstRate > 0);
+    const gst     = gstEnabled ? (l.exclAmt||0)*gstRate : 0;
+    rows.push({
+      client: l.client||'—', name: l.name||'Manual line',
+      contract:'', days:null, isRealized:true, isManual:true, manualId:l.id,
+      rev_type:'manual', rate:null,
+      exclAmt:l.exclAmt||0, gstRate, gst, inclAmt:(l.exclAmt||0)+gst,
+      cur:l.cur||'EUR',
+      costLocal:l.costLocal||0, costCur:l.costCur||'EUR',
+      costEUR: l.costLocal||0, revEUR: l.exclAmt||0,
+      invoiceNumber: l.invoiceNumber||'',
+      gstEnabled,
+      comment:'', mergedWith:'', isMergeTarget:false,
+    });
+  }
+  return rows;
+}
+
+function invFieldUpdate(id, field, value){
+  setOverride(invoiceMonth, id, field, value);
+}
+
+// Merge model: mergeGroup[groupId] = [id1, id2, ...] stored in overrides as mergeGroup on each id
+function invGetMergeGroup(id){ return getOverride(invoiceMonth, id).mergeGroup||null; }
+function invSetMergeGroup(id, gid){ setOverride(invoiceMonth, id, 'mergeGroup', gid); }
+
+function invMergeSelected(){
+  const checked = [...document.querySelectorAll('.inv-merge-chk:checked')].map(el=>el.dataset.id);
+  if(checked.length<2){ alert('Select at least 2 lines to merge.'); return; }
+  // Check all same currency
+  const rows = getInvoiceRows(invoiceMonth);
+  const curs = checked.map(id=>rows.find(r=>r.name===id)?.cur).filter(Boolean);
+  if([...new Set(curs)].length>1){ alert('Cannot merge lines with different currencies.'); return; }
+  // Use first id as group id, or reuse existing group
+  const existingGroup = checked.map(id=>invGetMergeGroup(id)).find(g=>g);
+  const gid = existingGroup || checked[0];
+  for(const id of checked) invSetMergeGroup(id, gid);
+  renderInvoice();
+}
+
+function invUnmerge(gid){
+  const rows = getInvoiceRows(invoiceMonth);
+  for(const r of rows){
+    const id = r.name;
+    if(invGetMergeGroup(id)===gid) setOverride(invoiceMonth, id, 'mergeGroup', null);
+  }
+  renderInvoice();
+}
+
+function renderInvoiceStrip(){
+  let h='';
+  MONTHS.forEach((m,i)=>{
+    const hasData = consultants.some(c=>(c.realized?.[m]||0)>0||(c.planned?.[m]||0)>0);
+    h+=`<button class="ms-btn ${invoiceMonth===m?'active':''}" onclick="setInvoiceMonth('${m}')">${MONTHS_FR[i]}${hasData?'':' <span style="opacity:.3">·</span>'}</button>`;
+  });
+  document.getElementById('invoice-month-strip').innerHTML=h;
+}
+function setInvoiceMonth(m){ invoiceMonth=m; renderInvoice(); }
+
+function renderInvoice(){
+  loadInvoiceData();
+  renderInvoiceStrip();
+
+  // Update Save / Cancel button states
+  const locked = isInvoiceLocked();
+  const saveBtn   = document.getElementById('invoice-save-btn');
+  const cancelBtn = document.getElementById('invoice-cancel-btn');
+  const badge     = document.getElementById('invoice-saved-badge');
+  if(saveBtn)   { saveBtn.style.display   = locked ? 'none'   : ''; }
+  if(cancelBtn) { cancelBtn.style.display = locked ? ''       : 'none'; }
+  if(badge)     { badge.style.display     = locked ? ''       : 'none'; }
+  const rows   = getInvoiceRows(invoiceMonth);
+  const mLabel = MONTHS_FR[MONTHS.indexOf(invoiceMonth)];
+
+  if(!rows.length){
+    document.getElementById('invoice-content').innerHTML=
+      `<div class="card" style="text-align:center;padding:48px;color:var(--muted)">
+        No days in ${mLabel} — invoice is generated once days are entered in Teams.
+      </div>`;
+    return;
+  }
+
+  // Resolve merge groups: group rows by their mergeGroup id
+  const groups = {}; // gid → [rows]
+  const ungrouped = [];
+  for(const r of rows){
+    const id  = r.name;
+    const gid = invGetMergeGroup(id);
+    if(gid){ if(!groups[gid]) groups[gid]=[]; groups[gid].push(r); }
+    else ungrouped.push(r);
+  }
+
+  // Build display entries: each is either a single row or a merged group
+  const displayEntries = [];
+  // Single rows
+  for(const r of ungrouped) displayEntries.push({type:'single', row:r});
+  // Merged groups: combine into one display entry
+  for(const [gid, gRows] of Object.entries(groups)){
+    const first = gRows[0];
+    const exclAmt = gRows.reduce((s,r)=>s+r.exclAmt, 0);
+    const gstRate = first.gstRate;
+    const gst     = exclAmt * gstRate;
+    const inclAmt = exclAmt + gst;
+    const names   = gRows.map(r=>r.name).join(' + ');
+    const clients = [...new Set(gRows.map(r=>r.client))].join(', ');
+    const ov      = getOverride(invoiceMonth, gid);
+    displayEntries.push({
+      type:'group', gid,
+      client: clients, names,
+      exclAmt, gst, gstRate, inclAmt, cur: first.cur,
+      invoiceNumber: ov.invoiceNumber||'',
+      rows: gRows,
+    });
+  }
+
+  // Sort by client then name
+  displayEntries.sort((a,b)=>{ const ac=a.type==='group'?a.client:a.row.client; const bc=b.type==='group'?b.client:b.row.client; return ac.localeCompare(bc); });
+
+  // Group display entries by client
+  const byClient={};
+  for(const e of displayEntries){
+    const c=e.type==='group'?e.client:e.row.client;
+    if(!byClient[c]) byClient[c]=[];
+    byClient[c].push(e);
+  }
+
+  let html=`
+  <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <div style="margin-left:auto">
+      ${!locked?`<button class="btn btn-green" style="padding:4px 12px;font-size:11px" onclick="invAddLine()">+ Add line</button>`:''}
+    </div>
+  </div>
+  <div class="card"><div class="table-wrap"><table style="font-size:12px">
+    <thead><tr style="font-size:10px;text-transform:uppercase;letter-spacing:.5px">
+      <th>Client</th><th>Consultant / Line</th><th>Type</th>
+      <th class="num">Rev. Excl. Tax</th><th class="num">Tax</th>
+      <th class="num">Rev. Incl. Tax</th><th class="num">Cost (local)</th><th>Currency</th>
+      <th>Invoice No.</th>
+    </tr></thead><tbody>`;
+
+  const totals={};
+  const clients=Object.keys(byClient);
+
+  for(let ci=0;ci<clients.length;ci++){
+    const client=clients[ci];
+    const entries=byClient[client];
+    for(let ei=0;ei<entries.length;ei++){
+      const e=entries[ei];
+      const isBorder = ei===0&&ci>0;
+
+      if(e.type==='group'){
+        // Merged group row
+        const safeGid=e.gid.replace(/[^a-zA-Z0-9]/g,'_');
+        if(!totals[e.cur]) totals[e.cur]={excl:0,incl:0};
+        totals[e.cur].excl+=e.exclAmt; totals[e.cur].incl+=e.inclAmt;
+        const groupCostLocal = e.rows.reduce((s,r)=>s+(r.costLocal||0),0);
+        const groupCostCur   = e.rows[0].costCur||'—';
+        html+=`<tr style="${isBorder?'border-top:2px solid var(--border)':''}">
+          <td><strong>${ei===0?e.client:''}</strong></td>
+          <td style="font-style:italic">${e.names}
+            ${!locked?`<button onclick="invUnmerge('${e.gid}')" title="Unmerge" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:11px;margin-left:6px;padding:0">✕ unmerge</button>`:''}
+          </td>
+          <td><span class="badge badge-yellow" style="font-size:9px">merged ×${e.rows.length}</span></td>
+          <td class="num pos" style="font-weight:700">${fmt(e.exclAmt)} <span class="neu" style="font-size:9px">${e.cur}</span></td>
+          <td class="num" style="color:var(--muted)">${e.gst>0?fmt(e.gst)+' <span style="font-size:9px">'+e.cur+'</span>':'—'}</td>
+          <td class="num" style="font-weight:700">${fmt(e.inclAmt)} <span class="neu" style="font-size:9px">${e.cur}</span></td>
+          <td class="num neg">${fmt(groupCostLocal)} <span class="neu" style="font-size:9px">${groupCostCur}</span></td>
+          <td><span class="badge ${e.cur==='EUR'?'badge-green':e.cur==='HKD'?'badge-blue':'badge-yellow'}">${e.cur}</span></td>
+          <td><input type="text" value="${e.invoiceNumber}" placeholder="INV-…" ${locked?'disabled style="opacity:.6;pointer-events:none"':'style=""'}
+              style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;
+                     padding:3px 6px;color:var(--text);font-size:11px;outline:none;width:110px"
+              onfocus="if(!this.value)this.value='INV-'"
+              oninput="invFieldUpdate('${e.gid}','invoiceNumber',this.value)"></td>
+        </tr>`;
+      } else {
+        // Single row
+        const r=e.row;
+        const id=r.name;
+        const safeId=id.replace(/[^a-zA-Z0-9]/g,'_');
+        if(!totals[r.cur]) totals[r.cur]={excl:0,incl:0};
+        totals[r.cur].excl+=r.exclAmt; totals[r.cur].incl+=r.inclAmt;
+        const inpStyle = `background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:3px 6px;color:var(--text);font-size:11px;outline:none;text-align:right;width:90px;font-family:'DM Mono',monospace${locked?';opacity:.6':''}`;
+        const inpTxtStyle = `background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);font-size:12px;outline:none;width:100%;padding:2px 4px`;
+
+        if(r.isManual){
+          // Manual line — fully editable, with delete
+          const lid = r.manualId;
+          const typeLabel = `<span class="badge badge-yellow" style="font-size:9px">manual</span>`;
+          const selStyle = `background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 4px;color:var(--text);font-family:'DM Mono',monospace;font-size:10px;outline:none;cursor:pointer;max-width:70px${locked?';opacity:.6;pointer-events:none':''}`;
+          const revCurOpts = ALL_CURRENCIES.map(c=>`<option value="${c}"${c===r.cur?' selected':''}>${c}</option>`).join('');
+          const costCurOpts = ALL_CURRENCIES.map(c=>`<option value="${c}"${c===r.costCur?' selected':''}>${c}</option>`).join('');
+          const revBadgeClass = r.cur==='EUR'?'badge-green':r.cur==='HKD'?'badge-blue':'badge-yellow';
+          html+=`<tr style="${isBorder?'border-top:2px solid var(--border)':''}">
+            <td><input type="text" value="${r.client!=='—'?r.client:''}" placeholder="Client…" ${locked?'disabled':''}
+              style="${inpTxtStyle}" onblur="invUpdateLine('${lid}','client',this.value);renderInvoice()"></td>
+            <td><input type="text" value="${r.name!=='Manual line'?r.name:''}" placeholder="Description…" ${locked?'disabled':''}
+              style="${inpTxtStyle}" onblur="invUpdateLine('${lid}','name',this.value);renderInvoice()"></td>
+            <td>${typeLabel}</td>
+            <td class="num pos">
+              <input type="text" value="${fmt(r.exclAmt)}" ${locked?'disabled':''}
+                style="${inpStyle}" title="Revenue excl. tax"
+                onchange="invUpdateLine('${lid}','exclAmt',this.value.replace(/[^0-9.-]/g,''));renderInvoice()">
+              <select style="${selStyle}" ${locked?'disabled':''}
+                onchange="invUpdateLine('${lid}','cur',this.value);if(!getManualLines(invoiceMonth).find(l=>l.id==='${lid}')?.gstEnabled&&this.value==='SGD'){invUpdateLine('${lid}','gstEnabled',true);}renderInvoice()">${revCurOpts}</select>
+            </td>
+            <td class="num" style="color:var(--muted);white-space:nowrap">
+              ${!locked ? `<label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:10px;color:var(--muted)">
+                <input type="checkbox" ${r.gstEnabled?'checked':''} style="cursor:pointer;accent-color:var(--accent)"
+                  onchange="invUpdateLine('${lid}','gstEnabled',this.checked);renderInvoice()">
+                ${r.gstEnabled&&r.gst>0 ? fmt(r.gst)+' <span style="font-size:9px">'+r.cur+'</span>' : `<span style="opacity:.45">GST</span>`}
+              </label>` : (r.gst>0 ? fmt(r.gst)+' <span style="font-size:9px">'+r.cur+'</span>' : '—')}
+            </td>
+            <td class="num" style="font-weight:600">${fmt(r.inclAmt)} <span class="neu" style="font-size:9px">${r.cur}</span></td>
+            <td class="num neg">
+              <input type="text" value="${fmt(r.costLocal)}" ${locked?'disabled':''}
+                style="${inpStyle}" title="Cost (local)"
+                onchange="invUpdateLine('${lid}','costLocal',this.value.replace(/[^0-9.-]/g,''));renderInvoice()">
+              <select style="${selStyle}" ${locked?'disabled':''}
+                onchange="invUpdateLine('${lid}','costCur',this.value);renderInvoice()">${costCurOpts}</select>
+            </td>
+            <td><span class="badge ${revBadgeClass}">${r.cur}</span></td>
+            <td>
+              <input type="text" value="${r.invoiceNumber}" placeholder="INV-…" ${locked?'disabled':''}
+                style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:3px 6px;color:var(--text);font-size:11px;outline:none;width:110px${locked?';opacity:.6':''}"
+                onfocus="if(!this.value)this.value='INV-'"
+                oninput="invUpdateLine('${lid}','invoiceNumber',this.value)">
+              ${!locked?`<button onclick="invDeleteLine('${lid}')" title="Delete" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:13px;padding:0 4px;vertical-align:middle">✕</button>`:''}
+            </td>
+          </tr>`;
+        } else {
+          // Consultant row — client & name editable
+          const typeLabel = r.isRealized
+              ? `<span class="badge badge-green" style="font-size:9px">realized</span>`
+              : `<span class="badge badge-blue"  style="font-size:9px">planned</span>`;
+          html+=`<tr style="${isBorder?'border-top:2px solid var(--border)':''}">
+            <td><input type="text" value="${r.client}" placeholder="Client…" ${locked?'disabled':''}
+              style="${inpTxtStyle}" onblur="invFieldUpdate('${id}','manualClient',this.value);renderInvoice()"></td>
+            <td><input type="text" value="${r.name}${r.days!==null?' ('+( r.days%1===0?r.days:r.days.toFixed(1))+'d)':''}" ${locked?'disabled':''}
+              style="${inpTxtStyle}" onblur="invFieldUpdate('${id}','manualName',this.value);renderInvoice()"></td>
+            <td>${typeLabel}</td>
+            <td class="num pos">
+              <input type="text" value="${fmt(r.exclAmt)}" ${locked?'disabled':''}
+                style="${inpStyle}" title="Revenue excl. tax — editable"
+                onchange="invFieldUpdate('${id}','manualRev',this.value.replace(/[^0-9.-]/g,''));renderInvoice()">
+              <span class="neu" style="font-size:9px">${r.cur}</span>
+            </td>
+            <td class="num" style="color:var(--muted)">${r.gst>0?fmt(r.gst)+' <span style="font-size:9px">'+r.cur+'</span>':'—'}</td>
+            <td class="num" style="font-weight:600">${fmt(r.inclAmt)} <span class="neu" style="font-size:9px">${r.cur}</span></td>
+            <td class="num neg">
+              <input type="text" value="${fmt(r.costLocal)}" ${locked?'disabled':''}
+                style="${inpStyle}" title="Cost (local currency) — editable"
+                onchange="invFieldUpdate('${id}','manualCost',this.value.replace(/[^0-9.-]/g,''));renderInvoice()">
+              <span class="neu" style="font-size:9px">${r.costCur}</span>
+            </td>
+            <td><span class="badge ${r.cur==='EUR'?'badge-green':r.cur==='HKD'?'badge-blue':'badge-yellow'}">${r.cur}</span></td>
+            <td><input type="text" value="${r.invoiceNumber}" placeholder="INV-…" ${locked?'disabled':''}
+                style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;
+                       padding:3px 6px;color:var(--text);font-size:11px;outline:none;width:110px${locked?';opacity:.6':''};"
+                onfocus="if(!this.value)this.value='INV-'"
+                oninput="invFieldUpdate('${id}','invoiceNumber',this.value)"></td>
+          </tr>`;
+        }
+      }
+    }
+  }
+
+  // TOTAL REVENUES PER CURRENCY
+  const curs=Object.keys(totals);
+  const totExcl=curs.map(c=>`<strong>${fmt(totals[c].excl)}</strong> <span class="neu" style="font-size:9px">${c}</span>`).join('<br>');
+  const totIncl=curs.map(c=>`<strong>${fmt(totals[c].incl)}</strong> <span class="neu" style="font-size:9px">${c}</span>`).join('<br>');
+  html+=`<tr style="border-top:2px solid var(--border)">
+    <td colspan="3"><strong>Total Revenues per currency</strong></td>
+    <td class="num pos">${totExcl}</td><td></td><td class="num">${totIncl}</td><td></td><td colspan="2"></td>
+  </tr>`;
+
+  // Totals in EUR and SGD
+  let grandExclEUR=0,grandInclEUR=0,grandExclSGD=0,grandInclSGD=0;
+  let grandCostEUR=0;
+  const sgdRate = FX['SGD']?.[invoiceMonth]??DEFAULT_RATES['SGD']??1;
+  for(const [c,v] of Object.entries(totals)){
+    grandExclEUR += toEUR(v.excl,c,invoiceMonth);
+    grandInclEUR += toEUR(v.incl,c,invoiceMonth);
+    grandExclSGD += toEUR(v.excl,c,invoiceMonth)*sgdRate;
+    grandInclSGD += toEUR(v.incl,c,invoiceMonth)*sgdRate;
+  }
+  // Sum costs from all display rows (consultant + misc)
+  for(const e of displayEntries){
+    if(e.type==='single') grandCostEUR += e.row.costEUR||0;
+    else grandCostEUR += e.rows.reduce((s,r)=>s+(r.costEUR||0),0);
+  }
+  const grandCostSGD        = grandCostEUR * sgdRate;
+  const grandMarginExclEUR  = grandExclEUR - grandCostEUR;
+  const grandMarginExclSGD  = grandExclSGD - grandCostSGD;
+  const grandMarginInclEUR  = grandInclEUR - grandCostEUR;
+  const grandMarginInclSGD  = grandInclSGD - grandCostSGD;
+  const marginExclPct       = grandExclEUR>0 ? grandMarginExclEUR/grandExclEUR*100 : 0;
+  const marginInclPct       = grandInclEUR>0 ? grandMarginInclEUR/grandInclEUR*100 : 0;
+
+  html+=`<tr style="border-top:3px solid var(--accent);background:var(--surface2)">
+    <td colspan="3"><strong style="font-size:13px">Total Revenues</strong> <span class="neu" style="font-size:9px">all currencies converted</span></td>
+    <td class="num pos">
+      <strong>${fmt(grandExclEUR)}</strong> <span class="neu" style="font-size:9px">EUR</span><br>
+      <strong>${fmt(grandExclSGD)}</strong> <span class="neu" style="font-size:9px">SGD</span>
+    </td>
+    <td></td>
+    <td class="num">
+      <strong>${fmt(grandInclEUR)}</strong> <span class="neu" style="font-size:9px">EUR</span><br>
+      <strong>${fmt(grandInclSGD)}</strong> <span class="neu" style="font-size:9px">SGD</span>
+    </td>
+    <td></td><td colspan="2"></td>
+  </tr>
+  <tr style="background:var(--surface2)">
+    <td colspan="3"><strong style="font-size:13px">Grand Margin</strong></td>
+    <td class="num ${grandMarginExclEUR>=0?'pos':'neg'}">
+      <strong>${fmt(grandMarginExclEUR)}</strong> <span class="neu" style="font-size:9px">EUR</span><br>
+      <strong>${fmt(grandMarginExclSGD)}</strong> <span class="neu" style="font-size:9px">SGD</span><br>
+      <span class="neu" style="font-size:9px">${fmt(marginExclPct,1)}% excl. tax</span>
+    </td>
+    <td></td>
+    <td class="num ${grandMarginInclEUR>=0?'pos':'neg'}">
+      <strong>${fmt(grandMarginInclEUR)}</strong> <span class="neu" style="font-size:9px">EUR</span><br>
+      <strong>${fmt(grandMarginInclSGD)}</strong> <span class="neu" style="font-size:9px">SGD</span><br>
+      <span class="neu" style="font-size:9px">${fmt(marginInclPct,1)}% incl. tax</span>
+    </td>
+    <td></td><td colspan="2"></td>
+  </tr>`;
+
+  html+=`</tbody></table></div></div>`;
+  document.getElementById('invoice-content').innerHTML=html;
+}
+
+function exportInvoiceExcel(){
+  loadInvoiceData();
+  const rows   = getInvoiceRows(invoiceMonth);
+  const mLabel = MONTHS_FR[MONTHS.indexOf(invoiceMonth)];
+  const n2 = v => Math.round((parseFloat(String(v||'0'))||0)*100)/100;
+
+  const groups={}, ungrouped=[];
+  for(const r of rows){
+    const id  = r.name;
+    const gid = invGetMergeGroup(id);
+    if(gid){ if(!groups[gid]) groups[gid]=[]; groups[gid].push(r); }
+    else ungrouped.push(r);
+  }
+
+  const data=[];
+  for(const r of ungrouped){
+    data.push({'Client':r.client,'Consultant/Line':r.name,'Type':r.isRealized?'realized':'planned','Days':r.days!==null?n2(r.days):'','Excl. Tax':n2(r.exclAmt),'Tax':n2(r.gst),'Incl. Tax':n2(r.inclAmt),'Currency':r.cur,'Invoice No.':r.invoiceNumber||''});
+  }
+  for(const [gid,gRows] of Object.entries(groups)){
+    const exclAmt=gRows.reduce((s,r)=>s+r.exclAmt,0);
+    const gst=exclAmt*gRows[0].gstRate, inclAmt=exclAmt+gst;
+    const ov=getOverride(invoiceMonth,gid);
+    data.push({'Client':[...new Set(gRows.map(r=>r.client))].join(', '),'Consultant/Line':gRows.map(r=>r.name).join(' + '),'Type':'merged ×'+gRows.length,'Days':'','Excl. Tax':n2(exclAmt),'Tax':n2(gst),'Incl. Tax':n2(inclAmt),'Currency':gRows[0].cur,'Invoice No.':ov.invoiceNumber||''});
+  }
+  data.sort((a,b)=>a['Client'].localeCompare(b['Client']));
+
+  const totals={};
+  for(const row of data){ if(!totals[row['Currency']]) totals[row['Currency']]={excl:0,incl:0}; totals[row['Currency']].excl+=row['Excl. Tax']||0; totals[row['Currency']].incl+=row['Incl. Tax']||0; }
+  data.push({});
+  for(const [c,v] of Object.entries(totals)) data.push({'Client':'TOTAL','Currency':c,'Excl. Tax':n2(v.excl),'Incl. Tax':n2(v.incl)});
+  data.push({});
+  let gExclEUR=0,gInclEUR=0,gExclSGD=0,gInclSGD=0;
+  for(const [c,v] of Object.entries(totals)){ gExclEUR+=toEUR(v.excl,c,invoiceMonth); gInclEUR+=toEUR(v.incl,c,invoiceMonth); gExclSGD+=toEUR(v.excl,c,invoiceMonth)*(FX['SGD']?.[invoiceMonth]??DEFAULT_RATES['SGD']??1); gInclSGD+=toEUR(v.incl,c,invoiceMonth)*(FX['SGD']?.[invoiceMonth]??DEFAULT_RATES['SGD']??1); }
+  data.push({'Client':'GRAND TOTAL','Currency':'EUR','Excl. Tax':n2(gExclEUR),'Incl. Tax':n2(gInclEUR)});
+  data.push({'Client':'GRAND TOTAL','Currency':'SGD','Excl. Tax':n2(gExclSGD),'Incl. Tax':n2(gInclSGD)});
+
+  if(!data.length){ alert('No data to export.'); return; }
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.json_to_sheet(data);
+  const keys=Object.keys(data[0]||{});
+  ws['!cols']=keys.map(k=>({wch:Math.min(40,Math.max(k.length+2,...data.map(r=>String(r[k]??'').length)))}));
+  if(ws['!ref']) ws['!autofilter']={ref:ws['!ref']};
+  XLSX.utils.book_append_sheet(wb,ws,mLabel+' 2026');
+  XLSX.writeFile(wb,`Keyrus_Invoice_${invoiceMonth}_2026.xlsx`);
+}
+
+loadInvoiceData();
+
+
+function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');btn.classList.add('active');
+  if(id==='dashboard'){initBacklogFilters();renderDashboard();}
+  if(id==='detail'){renderYearGrid();renderDetailStrip();renderDetail();}
+  if(id==='fx')renderFXPanel();
+  if(id==='invoice'){renderInvoice();}
+}
+function refreshAll(){
+  initDetailFilters();
+  initBacklogFilters();
+  if(document.getElementById('kpi-grid'))        renderDashboard();
+  if(document.getElementById('year-grid'))       renderYearGrid();
+  if(document.getElementById('detail-table'))    { renderDetail(); renderDetailStrip(); }
+  if(document.getElementById('invoice-content')) renderInvoice();
+}
+
+// INIT
+document.addEventListener('DOMContentLoaded', function(){
+  loadData();
+  populateCurrencySelects();
+  initDetailFilters();
+  initBacklogFilters();
+  if(document.getElementById('kpi-grid'))        renderDashboard();
+  if(document.getElementById('year-grid'))       renderYearGrid();
+  if(document.getElementById('detail-table'))    { renderDetail(); renderDetailStrip(); }
+  if(document.getElementById('invoice-content')) renderInvoice();
+});
+</script>
+<!-- IMPORT MODAL -->
+<div class="modal-overlay" id="import-overlay" onclick="closeImportOutside(event)">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-title">⬆ Import Excel file</div>
+    <div class="info-box" id="import-info">Reading file...</div>
+    <div id="import-preview" style="display:none">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;">Preview — detected columns</div>
+      <div class="table-wrap" style="max-height:300px;overflow-y:auto;margin-bottom:16px">
+        <table id="import-table"></table>
+      </div>
+      <div class="info-box" id="import-mapping-info"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-muted" onclick="closeImport()">Cancel</button>
+      <button class="btn btn-blue" id="import-confirm-btn" onclick="confirmImport()" style="display:none">✓ Replace all data</button>
+      <button class="btn btn-green" id="import-merge-btn" onclick="confirmMerge()" style="display:none">+ Merge with existing data</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== IMPORT EXCEL =====================
+let importedConsultants = [];
+
+function importExcel(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  event.target.value = ''; // reset so same file can be re-imported
+
+  document.getElementById('import-overlay').classList.add('open');
+  document.getElementById('import-preview').style.display = 'none';
+  document.getElementById('import-confirm-btn').style.display = 'none';
+  document.getElementById('import-merge-btn').style.display = 'none';
+  document.getElementById('import-info').innerHTML = `<strong>Reading "${file.name}"...</strong>`;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const wb = XLSX.read(data, { type: 'array', cellDates: true });
+      parseExcelWorkbook(wb, file.name);
+    } catch(err) {
+      document.getElementById('import-info').innerHTML = `<strong style="color:var(--red)">Read error:</strong> ${err.message}`;
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function parseExcelWorkbook(wb, filename) {
+  const sheetNames = wb.SheetNames;
+  const info = document.getElementById('import-info');
+
+  info.innerHTML = `<strong>File:</strong> ${filename}<br><strong>Sheets:</strong> ${sheetNames.join(', ')}`;
+
+  // ── 1. Consultants sheet ──────────────────────────────────────────────────
+  const consultantsSheetName = sheetNames.find(s => /consultant/i.test(s)) || sheetNames[0];
+  const wsC = wb.Sheets[consultantsSheetName];
+  const cRows = XLSX.utils.sheet_to_json(wsC, { defval: null });
+  if (!cRows.length) { info.innerHTML += '<br><span style="color:var(--red)">❌ No data in Consultants sheet.</span>'; return; }
+
+  // ── 2. Days sheet ─────────────────────────────────────────────────────────
+  const daysSheetName = sheetNames.find(s => /^days$/i.test(s.trim()));
+  let daysData = {};
+  if (daysSheetName) {
+    const wsD = wb.Sheets[daysSheetName];
+    const dRows = XLSX.utils.sheet_to_json(wsD, { defval: null });
+    for (const r of dRows) {
+      const name = (r['Consultant Name'] || r['Consultant'] || r['Name'] || '').toString().trim();
+      if (!name) continue;
+      const planned = {}, realized = {};
+      const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      for (let mi = 0; mi < MONTHS.length; mi++) {
+        const m = MONTHS[mi], ms = MONTHS_SHORT[mi];
+        const pv = parseFloat(r[`Days Planned ${m} 2026`] ?? r[`Planned ${m} 2026`] ?? r[`Planned ${ms} 2026`] ?? r[`Planned ${m}`] ?? r[`Planned ${ms}`] ?? 0);
+        const rv = parseFloat(r[`Days Realized ${m} 2026`] ?? r[`Realized ${m} 2026`] ?? r[`Realized ${ms} 2026`] ?? r[`Realized ${m}`] ?? r[`Realized ${ms}`] ?? 0);
+        planned[m]  = isNaN(pv) ? 0 : pv;
+        realized[m] = isNaN(rv) ? 0 : rv;
+      }
+      daysData[name] = { planned, realized };
+    }
+    info.innerHTML += `<br>✓ Days sheet: ${Object.keys(daysData).length} consultants`;
+  } else {
+    info.innerHTML += '<br><span style="color:var(--yellow)">⚠ No Days sheet found</span>';
+  }
+
+  // ── 3. Contracts sheet ────────────────────────────────────────────────────
+  const contractsSheetName = sheetNames.find(s => /^contracts?$/i.test(s.trim()));
+  let contractData = {}; // keyed by "Contract Name"
+  if (contractsSheetName) {
+    const wsK = wb.Sheets[contractsSheetName];
+    const kRows = XLSX.utils.sheet_to_json(wsK, { defval: null, raw: false });
+    for (const r of kRows) {
+      const cname = (r['Contract Name'] || '').toString().trim();
+      if (!cname) continue;
+      const parseD = v => { if(!v) return ''; const d=new Date(v); return isNaN(d.getTime())?v.toString().slice(0,10):d.toISOString().slice(0,10); };
+      contractData[cname] = {
+        contract_start:    parseD(r['Start Date'] || r['Start date']),
+        contract_end:      parseD(r['End date'] || r['End Date']),
+        contract_total:    parseFloat(r['Total amount of the contract'] || r['Total Amount'] || 0) || 0,
+        contract_cur:      (r['Currency'] || '').toString().trim(),
+        contract_category: (r['Category'] || 'Internal').toString().trim(),
+        contract_type:     (r['Contract Type'] || r['Type'] || '').toString().trim(),
+        invoice_entity:    (r['Invoice'] || '').toString().trim(),
+      };
+    }
+    info.innerHTML += `<br>✓ Contracts sheet: ${Object.keys(contractData).length} contracts`;
+  }
+
+  // ── 3b. Exchange Rates sheet ──────────────────────────────────────────────
+  const fxSheetName = sheetNames.find(s => /exchange/i.test(s));
+  if (fxSheetName) {
+    const wsFX = wb.Sheets[fxSheetName];
+    const fxRows = XLSX.utils.sheet_to_json(wsFX, { defval: null });
+    let fxCount = 0;
+    for (const row of fxRows) {
+      // First column is currency code — try common header names
+      const cur = (row['CURRENCY'] || row['Currency'] || row['currency'] || Object.values(row)[0] || '').toString().trim().toUpperCase();
+      if (!cur || cur === 'EUR' || cur.length > 4) continue;
+      if (!FX[cur]) FX[cur] = {};
+      for (const m of MONTHS) {
+        const shortM = m.slice(0,3);
+        const v = parseFloat(row[shortM] ?? row[m] ?? 0);
+        if (!isNaN(v) && v > 0) { FX[cur][m] = v; fxCount++; }
+      }
+    }
+    if (fxCount > 0) {
+      saveData();
+      info.innerHTML += `<br>✓ Exchange Rates: ${fxRows.length} currencies loaded`;
+    }
+  }
+
+  // ── 3d. Clients sheet — build client → industry map ──────────────────────
+  const clientIndustryMap = {};
+  const clientsSheetName = sheetNames.find(s => /^clients?$/i.test(s.trim()));
+  if (clientsSheetName) {
+    const wsClients = wb.Sheets[clientsSheetName];
+    const clientRows = XLSX.utils.sheet_to_json(wsClients, { defval: null });
+    for (const r of clientRows) {
+      const name = (r['Client Name'] || '').toString().trim();
+      const industry = (r['Industry'] || '').toString().trim();
+      if (name && industry) clientIndustryMap[name] = industry;
+    }
+  }
+
+  // ── 4. Build importedConsultants ──────────────────────────────────────────
+  importedConsultants = [];
+  for (const r of cRows) {
+    const name = (r['Consultant'] || r['Consultant Name'] || r['Name'] || '').toString().trim();
+    if (!name) continue;
+
+    // Parse safely — "-" or NaN → null
+    const safeNum = v => { const n=parseFloat(String(v||'').replace(/[^0-9.-]/g,'')); return isNaN(n)||n<=0?null:n; };
+    const cost_monthly = safeNum(r['Cost/Month'] || r['Costs per month']);
+    const cost_daily   = safeNum(r['Cost/Day']   || r['Costs per day']);
+    const rev_monthly  = safeNum(r['Rev/Month']  || r['Revenues per month']);
+    const rev_daily    = safeNum(r['Rev/Day']    || r['Revenues per day']);
+
+    // Types determined INDEPENDENTLY — cost monthly + rev daily is valid (e.g. Estella, Ferdinand)
+    const cost_type = cost_monthly ? 'monthly' : 'daily';
+    const rev_type  = rev_monthly  ? 'monthly' : 'daily';
+
+    const contractName = (r['Contract'] || r['Contract Name'] || '').toString().trim();
+    const cd = contractData[contractName] || {};
+
+    const dayEntry = daysData[name] || {};
+    const planned  = dayEntry.planned  || Object.fromEntries(MONTHS.map(m => [m, 0]));
+    const realized = dayEntry.realized || Object.fromEntries(MONTHS.map(m => [m, 0]));
+
+    const clientName = (r['Client'] || r['Client Name'] || '').toString().trim();
+
+    importedConsultants.push({
+      name,
+      client:            clientName,
+      contract:          contractName,
+      role:              (r['Role'] || '').toString().trim(),
+      company:           (r['Hiring Company'] || '').toString().trim(),
+      location:          (r['Location'] || '').toString().trim(),
+      domain:            (r['Domain'] || '').toString().trim(),
+      industry:          clientIndustryMap[clientName] || (r['Industry'] || '').toString().trim(),
+      contract_start:    cd.contract_start    || '',
+      contract_end:      cd.contract_end      || '',
+      contract_total:    cd.contract_total    || 0,
+      contract_cur:      cd.contract_cur      || '',
+      contract_category: cd.contract_category || 'Internal',
+      invoice_entity:    cd.invoice_entity    || '',
+      cost_type,
+      cost_monthly: cost_monthly || null,
+      cost_daily:   cost_daily   || null,
+      cost_cur:     (r['Cost Currency'] || 'SGD').toString().trim() || 'SGD',
+      rev_type,
+      rev_monthly:  rev_monthly || null,
+      rev_daily:    rev_daily   || null,
+      rev_cur:      (r['Rev Currency'] || r['Revenue Currency'] || 'SGD').toString().trim() || 'SGD',
+      planned,
+      realized,
+    });
+  }
+
+  // ── 5. Preview ────────────────────────────────────────────────────────────
+  document.getElementById('import-preview').style.display = '';
+  const previewCols = ['Consultant','Client','Role','Hiring Company','Location','Cost/Day','Cost/Month','Cost Currency','Rev/Day','Rev/Month','Rev Currency'];
+  let tableHtml = `<thead><tr>${previewCols.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+  cRows.slice(0,5).forEach(r => {
+    tableHtml += `<tr>${previewCols.map(h=>`<td class="neu" style="max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r[h]??'—'}</td>`).join('')}</tr>`;
+  });
+  tableHtml += '</tbody>';
+  document.getElementById('import-table').innerHTML = tableHtml;
+
+  info.innerHTML += `<br><strong style="color:var(--accent)">✓ ${importedConsultants.length} consultants ready to import.</strong>`;
+  document.getElementById('import-mapping-info').innerHTML =
+    `Days matched: ${importedConsultants.filter(c=>daysData[c.name]).length}/${importedConsultants.length} · Contracts matched: ${importedConsultants.filter(c=>contractData[c.contract]).length}/${importedConsultants.length}`;
+  document.getElementById('import-confirm-btn').style.display = '';
+  document.getElementById('import-merge-btn').style.display = '';
+}
+
+function confirmImport() {
+  if (!importedConsultants.length) return;
+  if (!confirm(`Replace all current data with the ${importedConsultants.length} imported consultants?`)) return;
+  consultants = importedConsultants;
+  saveData();
+  closeImport();
+  refreshAll();
+  alert(`✓ ${consultants.length} consultants imported successfully.`);
+}
+
+function confirmMerge() {
+  if (!importedConsultants.length) return;
+  // Add or update by name
+  let added = 0, updated = 0;
+  for (const imp of importedConsultants) {
+    const existing = consultants.findIndex(c => c.name.toLowerCase() === imp.name.toLowerCase());
+    if (existing >= 0) { consultants[existing] = imp; updated++; }
+    else { consultants.push(imp); added++; }
+  }
+  saveData();
+  closeImport();
+  refreshAll();
+  alert(`✓ Merge complete: ${added} added, ${updated} updated.`);
+}
+
+function closeImport() {
+  document.getElementById('import-overlay').classList.remove('open');
+  importedConsultants = [];
+}
+function closeImportOutside(e) {
+  if (e.target === document.getElementById('import-overlay')) closeImport();
+}
+</script>
+</body>
+</html>
