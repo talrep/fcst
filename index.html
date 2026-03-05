@@ -21,7 +21,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .logo{font-family:'Source Serif 4',Georgia,serif;font-size:20px;color:var(--text);font-weight:600;letter-spacing:-0.02em;}
 .logo span{color:var(--muted);font-size:11px;font-family:'Source Sans 3',sans-serif;margin-left:10px;font-weight:400;letter-spacing:0.05em;text-transform:uppercase;}
 nav{display:flex;gap:4px;}
-nav button{background:none;border:1px solid transparent;color:var(--muted);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:13px;transition:all .15s;font-weight:500;}
+nav button{background:none;border:1px solid transparent;color:var(--muted);padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px;transition:all .15s;}
 nav button:hover{color:var(--text);border-color:var(--border);}
 nav button.active{background:rgba(50,104,145,.08);color:var(--accent);border-color:var(--accent);}
 .btn-import{background:rgba(96,165,250,.1);border:1px solid var(--blue)!important;color:var(--blue)!important;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px;transition:all .15s;}
@@ -29,9 +29,9 @@ nav button.active{background:rgba(50,104,145,.08);color:var(--accent);border-col
 .main{padding:20px 24px;max-width:1700px;margin:0 auto;min-width:900px;}
 .section{display:none;}.section.active{display:block;}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;position:relative;overflow:hidden;transition:border-color .2s;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;position:relative;overflow:hidden;}
 .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.kpi.g::before{background:var(--pos-color);}.kpi.r::before{background:var(--red);}
+.kpi.g::before{background:#0a7a4b;}.kpi.r::before{background:var(--red);}
 .kpi.y::before{background:var(--yellow);}.kpi.b::before{background:var(--blue);}
 .kpi-label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-weight:600;}
 .kpi-value{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:500;}
@@ -39,20 +39,20 @@ nav button.active{background:rgba(50,104,145,.08);color:var(--accent);border-col
 .kpi-value.y{color:var(--yellow);}.kpi-value.b{color:var(--blue);}
 .kpi-sub{color:var(--muted);font-size:9px;margin-top:2px;}
 .chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;transition:border-color .2s;}
-.card-title{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:600;border-bottom:1px solid var(--border);padding-bottom:10px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;}
+.card-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
 canvas{max-height:260px;}
 .table-wrap{max-width:100%;}
 th.sortable:hover{background:var(--surface2);color:var(--text);}
 th.sort-active{color:var(--accent)!important;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 th{text-align:left;padding:8px 10px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid var(--text);white-space:nowrap;font-weight:600;}
-td{padding:7px 10px;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:7px 10px;border-bottom:1px solid rgba(42,47,58,.4);white-space:nowrap;}
 tr:hover td{background:var(--surface2);}
-td.num{text-align:right;font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
-.pos{color:var(--pos-color);}.neg{color:var(--red);}.neu{color:var(--muted);}
+td.num{text-align:right;font-variant-numeric:tabular-nums;}
+.pos{color:var(--accent);}.neg{color:var(--red);}.neu{color:var(--muted);}
 .filters{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
-select,input[type=text],input[type=number]{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-family:'Source Sans 3',sans-serif;font-size:13px;outline:none;transition:border-color .15s;}
+select,input[type=text],input[type=number]{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-family:'Source Sans 3',sans-serif;font-size:12px;outline:none;transition:border-color .15s;}
 select:focus,input:focus{border-color:var(--accent);}
 .btn{border-radius:6px;padding:6px 14px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px;border:1px solid;transition:all .15s;}
 .btn-green{background:rgba(79,255,176,.1);border-color:var(--accent);color:var(--accent);}
@@ -64,10 +64,10 @@ select:focus,input:focus{border-color:var(--accent);}
 .btn-muted{background:var(--surface2);border-color:var(--border);color:var(--muted);}
 .btn-muted:hover{color:var(--text);}
 .badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;}
-.badge-green{background:rgba(26,102,50,.08);color:var(--pos-color);}
+.badge-green{background:rgba(79,255,176,.1);color:var(--accent);}
 .badge-blue{background:rgba(96,165,250,.1);color:var(--blue);}
-.badge-yellow{background:rgba(176,123,0,.1);color:#b07b00;}
-.badge-orange{background:rgba(50,104,145,.06);color:var(--red);}
+.badge-yellow{background:rgba(255,209,102,.15);color:#b07d00;}
+.badge-orange{background:rgba(201,100,66,.12);color:var(--red);}
 .badge-muted{background:rgba(180,170,160,.12);color:var(--muted);}
 .year-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;margin-bottom:20px;}
 .mc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center;cursor:pointer;transition:all .15s;}
@@ -78,13 +78,13 @@ select:focus,input:focus{border-color:var(--accent);}
 .fx-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px;}
 .fx-table th{text-align:center;padding:7px 6px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--border);white-space:nowrap;}
 .fx-table th.fx-cur-col{text-align:left;width:80px;}
-.fx-table td{padding:4px 4px;border-bottom:1px solid var(--border);}
+.fx-table td{padding:4px 4px;border-bottom:1px solid rgba(42,47,58,.3);}
 .fx-table tr:hover td{background:var(--surface2);}
 .fx-table td.fx-cur-cell{color:var(--accent);font-size:11px;white-space:nowrap;padding-left:6px;}
 .fx-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:4px 6px;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:11px;text-align:right;outline:none;transition:border-color .15s;box-sizing:border-box;-moz-appearance:textfield;}
 .fx-input:focus{border-color:var(--accent);}
 .fx-input::-webkit-outer-spin-button,.fx-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;width:800px;max-width:96vw;max-height:92vh;overflow-y:auto;}
 .modal-title{font-family:'Source Serif 4',Georgia,serif;font-size:22px;margin-bottom:20px;color:var(--text);font-weight:600;letter-spacing:-0.02em;}
@@ -134,9 +134,11 @@ select:focus,input:focus{border-color:var(--accent);}
     <button onclick="showSection('invoice',this)">Invoices</button>
     <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
       <button onclick="exportToExcel()" style="background:rgba(79,255,176,.15);color:var(--accent);border:1px solid rgba(79,255,176,.3);padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px" title="Export all tabs to Excel">⬇ Export</button>
-      <button onclick="saveAppHTML()" style="background:rgba(50,104,145,.06);color:var(--accent);border:1px solid rgba(50,104,145,.4);padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px" title="Download app with all data baked in — use this to publish on GitHub">⬇ Save app</button>
+      <button onclick="saveAppHTML()" style="background:rgba(50,104,145,.06);color:var(--accent);border:1px solid rgba(50,104,145,.4);padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px" title="Download app with all data baked in">⬇ Save app</button>
       <button class="btn-import" onclick="document.getElementById('xl-input').click()" title="Import Excel">⬆ Import</button>
       <input type="file" id="xl-input" accept=".xlsx,.xls" style="display:none" onchange="importExcel(event)">
+      <span id="gh-status" style="font-size:11px;color:var(--muted);white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis"></span>
+      <button onclick="openGHSettings()" title="GitHub sync settings" style="background:none;border:1px solid var(--border);color:var(--muted);padding:5px 10px;border-radius:4px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px;transition:all .15s">⚙ Sync</button>
     </div>
   </nav>
 </header>
@@ -415,7 +417,7 @@ function loadData(){
   }catch(e){}
   consultants=JSON.parse(JSON.stringify(INIT));FX=mkFX();
 }
-function saveData(){try{localStorage.setItem('forecast2026v7',JSON.stringify({c:consultants,f:FX}));}catch(e){}}
+function saveData(){try{localStorage.setItem('forecast2026v7',JSON.stringify({c:consultants,f:FX}));}catch(e){} ghSave();}
 
 function toEUR(amount,currency,month){
   if(!amount||!currency)return 0;
@@ -1268,50 +1270,30 @@ function renderBacklog(){
 
 // ── SAVE APP AS SELF-CONTAINED HTML ──────────────────────────────────────────
 function saveAppHTML(){
-  // Get the full current HTML source
   const src = document.documentElement.outerHTML;
-
-  // Bake in current consultants data by replacing the INIT constant
   const consultantsJSON = JSON.stringify(consultants);
   let out = src.replace(/const INIT=\[[\s\S]*?\];/, 'const INIT=' + consultantsJSON + ';');
-
-  // Bake in current FX rates by replacing DEFAULT_RATES
-  // Build a merged object: DEFAULT_RATES overridden by current FX values
   const bakedRates = Object.assign({}, DEFAULT_RATES);
   for(const cur of Object.keys(FX)){
-    // Use the January rate as the representative default (or average)
     const jan = FX[cur]?.['January'];
     if(jan && !isNaN(jan) && jan > 0) bakedRates[cur] = jan;
   }
-  const ratesJSON = JSON.stringify(bakedRates);
-  out = out.replace(/const DEFAULT_RATES=\{[\s\S]*?\};/, 'const DEFAULT_RATES=' + ratesJSON + ';');
-
-  // Bake in full monthly FX so all months are correct, not just January
-  // We do this by injecting a startup script that pre-loads FX
-  const fxJSON = JSON.stringify(FX);
-  const invoiceJSON = JSON.stringify(invoiceOverrides);
-  const activeCurJSON = JSON.stringify(getActiveCurrencies());
-  const lockJSON = JSON.stringify(invoiceLocked);
-
-  const injected = `<script>
-// ── Baked-in data from Save app ──
-(function(){
-  try{
-    const bFX=${fxJSON};
-    const bInv=${invoiceJSON};
-    const bLock=${lockJSON};
-    const bCur=${activeCurJSON};
-    localStorage.setItem('forecast2026v7', JSON.stringify({c:${consultantsJSON},f:bFX}));
-    localStorage.setItem('invoiceOverrides_v2', JSON.stringify(bInv));
-    localStorage.setItem('invoiceLocked_v1', JSON.stringify(bLock));
-    localStorage.setItem('activeFXCurrencies_v1', JSON.stringify(bCur));
-  }catch(e){}
-})();
-<\/script>`;
-
-  // Inject right before </body>
-  out = out.replace('</body>', injected + '</body>');
-
+  out = out.replace(/const DEFAULT_RATES=\{[\s\S]*?\};/, 'const DEFAULT_RATES=' + JSON.stringify(bakedRates) + ';');
+  const injected = '<scr'+'ipt>\n'
+    + '(function(){\n'
+    + '  try{\n'
+    + '    const bFX='+JSON.stringify(FX)+';\n'
+    + '    const bInv='+JSON.stringify(invoiceOverrides)+';\n'
+    + '    const bLock='+JSON.stringify(invoiceLocked)+';\n'
+    + '    const bCur='+JSON.stringify(getActiveCurrencies())+';\n'
+    + '    localStorage.setItem(\'forecast2026v7\', JSON.stringify({c:'+consultantsJSON+',f:bFX}));\n'
+    + '    localStorage.setItem(\'invoiceOverrides_v2\', JSON.stringify(bInv));\n'
+    + '    localStorage.setItem(\'invoiceLocked_v1\', JSON.stringify(bLock));\n'
+    + '    localStorage.setItem(\'activeFXCurrencies_v1\', JSON.stringify(bCur));\n'
+    + '  }catch(e){}\n'
+    + '})();\n'
+    + '</'+'script>';
+  out = out.replace('</'+'body>', injected + '</'+'body>');
   const blob = new Blob([out], {type:'text/html'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1319,7 +1301,79 @@ function saveAppHTML(){
   a.click();
 }
 
-// ── EXCEL EXPORT ─────────────────────────────────────────────────────────────
+// ── GITHUB SYNC ───────────────────────────────────────────────────────────────
+const GH_REPO = 'talrep/fcst';
+const GH_FILE = 'data.json';
+const GH_TOKEN_KEY = 'ghToken_v1';
+
+function ghToken(){ return localStorage.getItem(GH_TOKEN_KEY)||''; }
+function ghSetToken(t){ localStorage.setItem(GH_TOKEN_KEY, t.trim()); }
+let ghSyncing = false;
+let ghStatusEl = null;
+function ghSetStatus(msg, color='var(--muted)'){
+  if(!ghStatusEl) ghStatusEl = document.getElementById('gh-status');
+  if(ghStatusEl){ ghStatusEl.textContent = msg; ghStatusEl.style.color = color; }
+}
+async function ghLoad(){
+  const token = ghToken(); if(!token) return false;
+  try {
+    ghSetStatus('⟳ Loading from GitHub…');
+    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`, {
+      headers:{ Authorization:`token ${token}`, Accept:'application/vnd.github.v3+json' }
+    });
+    if(res.status===404){ ghSetStatus('No remote data yet — will create on first save','var(--yellow)'); return false; }
+    if(!res.ok){ ghSetStatus('⚠ GitHub error '+res.status,'var(--red)'); return false; }
+    const meta = await res.json();
+    const raw  = atob(meta.content.replace(/\n/g,''));
+    const d    = JSON.parse(raw);
+    applyData(d);
+    ghSetStatus('✓ Synced from GitHub','var(--pos-color)');
+    return true;
+  } catch(e){ ghSetStatus('⚠ Sync failed: '+e.message,'var(--red)'); return false; }
+}
+async function ghSave(){
+  const token = ghToken(); if(!token) return;
+  if(ghSyncing) return; ghSyncing = true;
+  ghSetStatus('⟳ Saving to GitHub…');
+  try {
+    const payload = {v:'forecast2026v7',c:consultants,f:FX,inv:invoiceOverrides,lock:invoiceLocked,activeCur:getActiveCurrencies()};
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
+    let sha = '';
+    const check = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
+    if(check.ok){ const m=await check.json(); sha=m.sha||''; }
+    const body = {message:'Update forecast data',content};
+    if(sha) body.sha = sha;
+    const res = await fetch(`https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(res.ok){ ghSetStatus('✓ Saved · '+new Date().toLocaleTimeString(),'var(--pos-color)'); }
+    else{ const e=await res.json(); ghSetStatus('⚠ Save failed: '+(e.message||res.status),'var(--red)'); }
+  } catch(e){ ghSetStatus('⚠ '+e.message,'var(--red)'); }
+  ghSyncing = false;
+}
+function applyData(d){
+  if(d.c&&d.c.length){
+    consultants=d.c;
+    const initMap={};INIT.forEach(c=>{initMap[c.name]=c;});
+    consultants.forEach(c=>{ const src=initMap[c.name]; if(!src) return;
+      if(!c.domain) c.domain=src.domain||''; if(!c.industry) c.industry=src.industry||'';
+      c.contract_category=src.contract_category||c.contract_category||'Internal';
+      c.contract_type=src.contract_type||c.contract_type||'';
+    });
+  }
+  const base=mkFX();
+  if(d.f){ for(const cur of ALL_CURRENCIES){ if(d.f[cur]){ for(const m of MONTHS){ const v=d.f[cur][m]; if(v&&!isNaN(v)&&v>0)base[cur][m]=v; } } } }
+  FX=base;
+  if(d.inv) invoiceOverrides=d.inv;
+  if(d.lock) invoiceLocked=d.lock;
+  if(d.activeCur&&Array.isArray(d.activeCur)){ setActiveCurrencies(d.activeCur); rebuildAllCurrencies(); }
+  try{
+    localStorage.setItem('forecast2026v7',JSON.stringify({c:consultants,f:FX}));
+    localStorage.setItem('invoiceOverrides_v2',JSON.stringify(invoiceOverrides));
+    localStorage.setItem('invoiceLocked_v1',JSON.stringify(invoiceLocked));
+    localStorage.setItem(FX_STORAGE_KEY,JSON.stringify(getActiveCurrencies()));
+  }catch(e){}
+}
+
+// ── EXCEL EXPORT ────────────────────────────────────────────────────────────── ─────────────────────────────────────────────────────────────
 function exportToExcel(){
   const wb = XLSX.utils.book_new();
   const MS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1541,7 +1595,7 @@ const INV_LOCK_KEY    = 'invoiceLocked_v1';
 let invoiceLocked = {};  // { month: true/false }
 
 function loadInvoiceLock(){ try{ const s=localStorage.getItem(INV_LOCK_KEY); if(s) invoiceLocked=JSON.parse(s); }catch(e){} }
-function saveInvoiceLock(){ try{ localStorage.setItem(INV_LOCK_KEY,JSON.stringify(invoiceLocked)); }catch(e){} }
+function saveInvoiceLock(){ try{ localStorage.setItem(INV_LOCK_KEY,JSON.stringify(invoiceLocked)); }catch(e){} ghSave(); }
 function isInvoiceLocked(){ return !!(invoiceLocked[invoiceMonth]); }
 
 function invoiceSave(){
@@ -1561,6 +1615,7 @@ function loadInvoiceData(){
 }
 function saveInvoiceData(){
   try{ localStorage.setItem(INV_STORAGE_KEY, JSON.stringify(invoiceOverrides)); }catch(e){}
+  ghSave();
 }
 function getOverride(month, name){ return (invoiceOverrides[month]||{})[name]||{}; }
 function setOverride(month, name, field, value){
@@ -1579,7 +1634,7 @@ function saveManualLines(month, lines){
 }
 function invAddLine(){
   const lines = getManualLines(invoiceMonth);
-  lines.push({id:'ml_'+Date.now(), client:'', name:'', cur:'EUR', exclAmt:0, costLocal:0, costCur:'EUR', invoiceNumber:'', gstEnabled:false});
+  lines.push({id:'ml_'+Date.now(), client:'', name:'', cur:'EUR', exclAmt:0, costLocal:0, costCur:'EUR', invoiceNumber:''});
   saveManualLines(invoiceMonth, lines);
   renderInvoice();
 }
@@ -1593,7 +1648,6 @@ function invUpdateLine(id, field, value){
   const l = lines.find(l=>l.id===id);
   if(!l) return;
   if(field==='exclAmt'||field==='costLocal') l[field]=parseFloat(value)||0;
-  else if(field==='gstEnabled') l[field]=!!value;
   else l[field]=value;
   saveManualLines(invoiceMonth, lines);
 }
@@ -1642,8 +1696,7 @@ function getInvoiceRows(month){
   // Append manual lines added via + Add
   for(const l of getManualLines(month)){
     const gstRate = getGSTRate(l.cur||'EUR');
-    const gstEnabled = l.gstEnabled !== undefined ? l.gstEnabled : (gstRate > 0);
-    const gst     = gstEnabled ? (l.exclAmt||0)*gstRate : 0;
+    const gst     = (l.exclAmt||0)*gstRate;
     rows.push({
       client: l.client||'—', name: l.name||'Manual line',
       contract:'', days:null, isRealized:true, isManual:true, manualId:l.id,
@@ -1653,7 +1706,6 @@ function getInvoiceRows(month){
       costLocal:l.costLocal||0, costCur:l.costCur||'EUR',
       costEUR: l.costLocal||0, revEUR: l.exclAmt||0,
       invoiceNumber: l.invoiceNumber||'',
-      gstEnabled,
       comment:'', mergedWith:'', isMergeTarget:false,
     });
   }
@@ -1830,11 +1882,8 @@ function renderInvoice(){
           // Manual line — fully editable, with delete
           const lid = r.manualId;
           const typeLabel = `<span class="badge badge-yellow" style="font-size:9px">manual</span>`;
-          const selStyle = `background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 4px;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:10px;outline:none;cursor:pointer;max-width:70px${locked?';opacity:.6;pointer-events:none':''}`;
-          const revCurOpts = ALL_CURRENCIES.map(c=>`<option value="${c}"${c===r.cur?' selected':''}>${c}</option>`).join('');
-          const costCurOpts = ALL_CURRENCIES.map(c=>`<option value="${c}"${c===r.costCur?' selected':''}>${c}</option>`).join('');
-          const revBadgeClass = r.cur==='EUR'?'badge-green':r.cur==='HKD'?'badge-blue':'badge-yellow';
           html+=`<tr style="${isBorder?'border-top:2px solid var(--border)':''}">
+            <td></td>
             <td><input type="text" value="${r.client!=='—'?r.client:''}" placeholder="Client…" ${locked?'disabled':''}
               style="${inpTxtStyle}" onblur="invUpdateLine('${lid}','client',this.value);renderInvoice()"></td>
             <td><input type="text" value="${r.name!=='Manual line'?r.name:''}" placeholder="Description…" ${locked?'disabled':''}
@@ -1844,28 +1893,20 @@ function renderInvoice(){
               <input type="text" value="${fmt(r.exclAmt)}" ${locked?'disabled':''}
                 style="${inpStyle}" title="Revenue excl. tax"
                 onchange="invUpdateLine('${lid}','exclAmt',this.value.replace(/[^0-9.-]/g,''));renderInvoice()">
-              <select style="${selStyle}" ${locked?'disabled':''}
-                onchange="invUpdateLine('${lid}','cur',this.value);if(!getManualLines(invoiceMonth).find(l=>l.id==='${lid}')?.gstEnabled&&this.value==='SGD'){invUpdateLine('${lid}','gstEnabled',true);}renderInvoice()">${revCurOpts}</select>
+              <span class="neu" style="font-size:9px">${r.cur}</span>
             </td>
-            <td class="num" style="color:var(--muted);white-space:nowrap">
-              ${!locked ? `<label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:10px;color:var(--muted)">
-                <input type="checkbox" ${r.gstEnabled?'checked':''} style="cursor:pointer;accent-color:var(--accent)"
-                  onchange="invUpdateLine('${lid}','gstEnabled',this.checked);renderInvoice()">
-                ${r.gstEnabled&&r.gst>0 ? fmt(r.gst)+' <span style="font-size:9px">'+r.cur+'</span>' : `<span style="opacity:.45">GST</span>`}
-              </label>` : (r.gst>0 ? fmt(r.gst)+' <span style="font-size:9px">'+r.cur+'</span>' : '—')}
-            </td>
+            <td class="num" style="color:var(--muted)">${r.gst>0?fmt(r.gst)+' <span style="font-size:9px">'+r.cur+'</span>':'—'}</td>
             <td class="num" style="font-weight:600">${fmt(r.inclAmt)} <span class="neu" style="font-size:9px">${r.cur}</span></td>
             <td class="num neg">
               <input type="text" value="${fmt(r.costLocal)}" ${locked?'disabled':''}
                 style="${inpStyle}" title="Cost (local)"
                 onchange="invUpdateLine('${lid}','costLocal',this.value.replace(/[^0-9.-]/g,''));renderInvoice()">
-              <select style="${selStyle}" ${locked?'disabled':''}
-                onchange="invUpdateLine('${lid}','costCur',this.value);renderInvoice()">${costCurOpts}</select>
+              <span class="neu" style="font-size:9px">${r.costCur}</span>
             </td>
-            <td><span class="badge ${revBadgeClass}">${r.cur}</span></td>
+            <td><span class="badge badge-yellow">EUR</span></td>
             <td>
               <input type="text" value="${r.invoiceNumber}" placeholder="INV-…" ${locked?'disabled':''}
-                style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:3px 6px;color:var(--text);font-size:11px;outline:none;width:110px${locked?';opacity:.6':''}"
+                style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:3px 6px;color:var(--text);font-size:11px;outline:none;width:90px${locked?';opacity:.6':''}"
                 onfocus="if(!this.value)this.value='INV-'"
                 oninput="invUpdateLine('${lid}','invoiceNumber',this.value)">
               ${!locked?`<button onclick="invDeleteLine('${lid}')" title="Delete" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:13px;padding:0 4px;vertical-align:middle">✕</button>`:''}
@@ -1932,13 +1973,13 @@ function renderInvoice(){
     if(e.type==='single') grandCostEUR += e.row.costEUR||0;
     else grandCostEUR += e.rows.reduce((s,r)=>s+(r.costEUR||0),0);
   }
-  const grandCostSGD        = grandCostEUR * sgdRate;
-  const grandMarginExclEUR  = grandExclEUR - grandCostEUR;
-  const grandMarginExclSGD  = grandExclSGD - grandCostSGD;
-  const grandMarginInclEUR  = grandInclEUR - grandCostEUR;
-  const grandMarginInclSGD  = grandInclSGD - grandCostSGD;
-  const marginExclPct       = grandExclEUR>0 ? grandMarginExclEUR/grandExclEUR*100 : 0;
-  const marginInclPct       = grandInclEUR>0 ? grandMarginInclEUR/grandInclEUR*100 : 0;
+  const grandCostSGD   = grandCostEUR * sgdRate;
+  const grandMarginEUR    = grandExclEUR - grandCostEUR;
+  const grandMarginSGD    = grandExclSGD - grandCostSGD;
+  const grandMarginInclEUR = grandInclEUR - grandCostEUR;
+  const grandMarginInclSGD = grandInclSGD - grandCostSGD;
+  const marginPct          = grandExclEUR>0 ? grandMarginEUR/grandExclEUR*100 : 0;
+  const marginInclPct      = grandInclEUR>0 ? grandMarginInclEUR/grandInclEUR*100 : 0;
 
   html+=`<tr style="border-top:3px solid var(--accent);background:var(--surface2)">
     <td colspan="3"><strong style="font-size:13px">Total Revenues</strong> <span class="neu" style="font-size:9px">all currencies converted</span></td>
@@ -1955,10 +1996,10 @@ function renderInvoice(){
   </tr>
   <tr style="background:var(--surface2)">
     <td colspan="3"><strong style="font-size:13px">Grand Margin</strong></td>
-    <td class="num ${grandMarginExclEUR>=0?'pos':'neg'}">
-      <strong>${fmt(grandMarginExclEUR)}</strong> <span class="neu" style="font-size:9px">EUR</span><br>
-      <strong>${fmt(grandMarginExclSGD)}</strong> <span class="neu" style="font-size:9px">SGD</span><br>
-      <span class="neu" style="font-size:9px">${fmt(marginExclPct,1)}% excl. tax</span>
+    <td class="num ${grandMarginEUR>=0?'pos':'neg'}">
+      <strong>${fmt(grandMarginEUR)}</strong> <span class="neu" style="font-size:9px">EUR</span><br>
+      <strong>${fmt(grandMarginSGD)}</strong> <span class="neu" style="font-size:9px">SGD</span><br>
+      <span class="neu" style="font-size:9px">${fmt(marginPct,1)}% excl. tax</span>
     </td>
     <td></td>
     <td class="num ${grandMarginInclEUR>=0?'pos':'neg'}">
@@ -2041,7 +2082,7 @@ function refreshAll(){
 }
 
 // INIT
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', async function(){
   loadData();
   populateCurrencySelects();
   initDetailFilters();
@@ -2050,6 +2091,15 @@ document.addEventListener('DOMContentLoaded', function(){
   if(document.getElementById('year-grid'))       renderYearGrid();
   if(document.getElementById('detail-table'))    { renderDetail(); renderDetailStrip(); }
   if(document.getElementById('invoice-content')) renderInvoice();
+  if(ghToken()){
+    const loaded = await ghLoad();
+    if(loaded){
+      populateCurrencySelects(); initDetailFilters(); initBacklogFilters();
+      renderDashboard(); renderYearGrid(); renderDetail(); renderDetailStrip(); renderInvoice();
+    }
+  } else {
+    ghSetStatus('No token — data saved locally only');
+  }
 });
 </script>
 <!-- IMPORT MODAL -->
@@ -2164,20 +2214,14 @@ function parseExcelWorkbook(wb, filename) {
   const fxSheetName = sheetNames.find(s => /exchange/i.test(s));
   if (fxSheetName) {
     const wsFX = wb.Sheets[fxSheetName];
-    // Use raw array mode to handle the 2-row header structure:
-    // Row 1: "CURRENCY", description, ...
-    // Row 2: null, "Jan", "Feb", ... (actual month headers)
-    // Row 3+: currency code, values
     const rawRows = XLSX.utils.sheet_to_json(wsFX, { header: 1, defval: null });
     let fxCount = 0;
-
-    // Find the row that contains month abbreviations (Jan, Feb, ...)
     let monthRowIdx = -1;
-    let colMap = {}; // month name → column index
+    let colMap = {};
     for (let ri = 0; ri < Math.min(5, rawRows.length); ri++) {
       const row = rawRows[ri];
       const hits = row.filter(v => v && MONTHS.some(m => m.slice(0,3).toLowerCase() === String(v).trim().toLowerCase()));
-      if (hits.length >= 6) { // found month row
+      if (hits.length >= 6) {
         monthRowIdx = ri;
         row.forEach((v, ci) => {
           if (!v) return;
@@ -2188,9 +2232,7 @@ function parseExcelWorkbook(wb, filename) {
         break;
       }
     }
-
     if (monthRowIdx >= 0) {
-      // Currency code is always in column 0 of data rows
       for (let ri = monthRowIdx + 1; ri < rawRows.length; ri++) {
         const row = rawRows[ri];
         const cur = row[0] ? String(row[0]).trim().toUpperCase() : '';
@@ -2203,12 +2245,11 @@ function parseExcelWorkbook(wb, filename) {
         }
       }
     }
-
     if (fxCount > 0) {
       saveData();
       info.innerHTML += `<br>✓ Exchange Rates: updated (${fxCount} values across ${Math.round(fxCount/12)} currencies)`;
     } else {
-      info.innerHTML += `<br><span style="color:var(--yellow)">⚠ Exchange Rates sheet found but no values parsed — check format</span>`;
+      info.innerHTML += `<br><span style="color:var(--yellow)">⚠ Exchange Rates sheet found but no values parsed</span>`;
     }
   }
 
@@ -2327,6 +2368,71 @@ function closeImport() {
 }
 function closeImportOutside(e) {
   if (e.target === document.getElementById('import-overlay')) closeImport();
+}
+</script>
+
+<!-- GITHUB SETTINGS MODAL -->
+<div class="modal-overlay" id="gh-settings-overlay" onclick="if(event.target===this)closeGHSettings()">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-title">GitHub Sync Settings</div>
+    <div class="info-box" style="margin-bottom:16px;font-size:12px;line-height:1.7">
+      Data is saved to <strong>talrep/fcst/data.json</strong> on every change.<br>
+      All devices and users sharing this URL will see the same data.<br><br>
+      <strong>How to create a token:</strong><br>
+      1. Go to <strong>github.com → Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong><br>
+      2. Click <strong>Generate new token</strong><br>
+      3. Under <em>Repository access</em>, select only <strong>talrep/fcst</strong><br>
+      4. Under <em>Permissions → Contents</em>, select <strong>Read and write</strong><br>
+      5. Generate and paste below
+    </div>
+    <div class="fg" style="margin-bottom:16px">
+      <label class="fl">GitHub Personal Access Token</label>
+      <input class="fi" id="gh-token-input" type="password" placeholder="github_pat_…" autocomplete="off">
+      <span style="font-size:10px;color:var(--muted);margin-top:4px">Stored only in your browser's localStorage — never sent anywhere except the GitHub API.</span>
+    </div>
+    <div id="gh-test-result" style="font-size:12px;min-height:20px;margin-bottom:12px"></div>
+    <div class="modal-footer">
+      <button class="btn btn-muted" onclick="closeGHSettings()">Cancel</button>
+      <button class="btn btn-blue" onclick="ghTestToken()">Test connection</button>
+      <button class="btn btn-green" onclick="ghSaveToken()">✓ Save & sync</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openGHSettings(){
+  document.getElementById('gh-token-input').value = ghToken();
+  document.getElementById('gh-test-result').textContent = '';
+  document.getElementById('gh-settings-overlay').classList.add('open');
+}
+function closeGHSettings(){
+  document.getElementById('gh-settings-overlay').classList.remove('open');
+}
+async function ghTestToken(){
+  const t = document.getElementById('gh-token-input').value.trim();
+  const el = document.getElementById('gh-test-result');
+  if(!t){ el.textContent='Please enter a token'; el.style.color='var(--red)'; return; }
+  el.textContent = '⟳ Testing…'; el.style.color='var(--muted)';
+  try{
+    const res = await fetch(`https://api.github.com/repos/${GH_REPO}`, {
+      headers:{ Authorization:`token ${t}`, Accept:'application/vnd.github.v3+json' }
+    });
+    if(res.ok){ el.textContent='✓ Connected to talrep/fcst'; el.style.color='var(--pos-color)'; }
+    else{ el.textContent='⚠ Error '+res.status+' — check token permissions'; el.style.color='var(--red)'; }
+  }catch(e){ el.textContent='⚠ '+e.message; el.style.color='var(--red)'; }
+}
+async function ghSaveToken(){
+  const t = document.getElementById('gh-token-input').value.trim();
+  if(!t) return;
+  ghSetToken(t);
+  closeGHSettings();
+  const loaded = await ghLoad();
+  if(loaded){
+    populateCurrencySelects(); initDetailFilters(); initBacklogFilters();
+    renderDashboard(); renderYearGrid(); renderDetail(); renderDetailStrip(); renderInvoice();
+  } else {
+    await ghSave();
+  }
 }
 </script>
 </body>
