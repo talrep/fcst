@@ -7,54 +7,54 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Source+Sans+3:wght@300;400;500;600&display=swap');
 :root {
-  --bg:#f5f0e8;--surface:#fffefb;--surface2:#ede8df;--border:#d9d2c5;
-  --accent:#c96442;--red:#c0392b;--yellow:#c96442;--blue:#2d6a9f;
-  --text:#1a1a1a;--muted:#7a7060;
-  --pos-color:#2d6a4f;--neg-color:#c0392b;
+  --bg:#f8f8f5;--surface:#ffffff;--surface2:#f2f2ef;--border:#e2e2de;
+  --accent:#326891;--red:#c0392b;--yellow:#b07b00;--blue:#326891;
+  --text:#1a1a1a;--muted:#6b6b6b;
+  --pos-color:#1a6632;--neg-color:#c0392b;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{overflow-x:auto;}
-body{font-family:'DM Mono',monospace;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;}
-header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;left:0;z-index:200;box-shadow:0 2px 8px rgba(45,106,159,.06);min-width:900px;}
-.logo{font-family:'DM Serif Display',serif;font-size:20px;color:var(--accent);}
-.logo span{color:var(--muted);font-size:12px;font-family:'DM Mono',monospace;margin-left:10px;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;left:0;z-index:200;box-shadow:0 1px 0 var(--border),0 2px 8px rgba(0,0,0,.04);min-width:900px;}
+.logo{font-family:'Source Serif 4',Georgia,serif;font-size:20px;color:var(--text);font-weight:600;letter-spacing:-0.02em;}
+.logo span{color:var(--muted);font-size:11px;font-family:'Source Sans 3',sans-serif;margin-left:10px;font-weight:400;letter-spacing:0.05em;text-transform:uppercase;}
 nav{display:flex;gap:4px;}
-nav button{background:none;border:1px solid transparent;color:var(--muted);padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;transition:all .15s;}
+nav button{background:none;border:1px solid transparent;color:var(--muted);padding:6px 14px;border-radius:4px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:13px;transition:all .15s;font-weight:500;}
 nav button:hover{color:var(--text);border-color:var(--border);}
-nav button.active{background:rgba(45,106,159,.08);color:var(--accent);border-color:var(--accent);}
-.btn-import{background:rgba(96,165,250,.1);border:1px solid var(--blue)!important;color:var(--blue)!important;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;transition:all .15s;}
+nav button.active{background:rgba(50,104,145,.08);color:var(--accent);border-color:var(--accent);}
+.btn-import{background:rgba(96,165,250,.1);border:1px solid var(--blue)!important;color:var(--blue)!important;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px;transition:all .15s;}
 .btn-import:hover{background:rgba(96,165,250,.2)!important;}
 .main{padding:20px 24px;max-width:1700px;margin:0 auto;min-width:900px;}
 .section{display:none;}.section.active{display:block;}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
-.kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;position:relative;overflow:hidden;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;position:relative;overflow:hidden;transition:border-color .2s;}
 .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.kpi.g::before{background:#0a7a4b;}.kpi.r::before{background:var(--red);}
+.kpi.g::before{background:var(--pos-color);}.kpi.r::before{background:var(--red);}
 .kpi.y::before{background:var(--yellow);}.kpi.b::before{background:var(--blue);}
-.kpi-label{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
-.kpi-value{font-family:'DM Serif Display',serif;font-size:18px;}
+.kpi-label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-weight:600;}
+.kpi-value{font-family:'Source Serif 4',Georgia,serif;font-size:22px;font-weight:500;}
 .kpi-value.g{color:var(--accent);}.kpi-value.r{color:var(--red);}
 .kpi-value.y{color:var(--yellow);}.kpi-value.b{color:var(--blue);}
 .kpi-sub{color:var(--muted);font-size:9px;margin-top:2px;}
 .chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:20px;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;}
-.card-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px;transition:border-color .2s;}
+.card-title{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:600;border-bottom:1px solid var(--border);padding-bottom:10px;}
 canvas{max-height:260px;}
 .table-wrap{max-width:100%;}
 th.sortable:hover{background:var(--surface2);color:var(--text);}
 th.sort-active{color:var(--accent)!important;}
-table{width:100%;border-collapse:collapse;font-size:12px;}
-th{text-align:left;padding:7px 10px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--border);white-space:nowrap;}
-td{padding:7px 10px;border-bottom:1px solid rgba(42,47,58,.4);white-space:nowrap;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;padding:8px 10px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid var(--text);white-space:nowrap;font-weight:600;}
+td{padding:7px 10px;border-bottom:1px solid var(--border);white-space:nowrap;}
 tr:hover td{background:var(--surface2);}
-td.num{text-align:right;font-variant-numeric:tabular-nums;}
-.pos{color:var(--accent);}.neg{color:var(--red);}.neu{color:var(--muted);}
+td.num{text-align:right;font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
+.pos{color:var(--pos-color);}.neg{color:var(--red);}.neu{color:var(--muted);}
 .filters{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
-select,input[type=text],input[type=number]{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:6px;font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color .15s;}
+select,input[type=text],input[type=number]{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:4px;font-family:'Source Sans 3',sans-serif;font-size:13px;outline:none;transition:border-color .15s;}
 select:focus,input:focus{border-color:var(--accent);}
-.btn{border-radius:6px;padding:6px 14px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;border:1px solid;transition:all .15s;}
+.btn{border-radius:6px;padding:6px 14px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px;border:1px solid;transition:all .15s;}
 .btn-green{background:rgba(79,255,176,.1);border-color:var(--accent);color:var(--accent);}
 .btn-green:hover{background:rgba(79,255,176,.2);}
 .btn-red{background:rgba(255,107,107,.1);border-color:var(--red);color:var(--red);}
@@ -64,10 +64,10 @@ select:focus,input:focus{border-color:var(--accent);}
 .btn-muted{background:var(--surface2);border-color:var(--border);color:var(--muted);}
 .btn-muted:hover{color:var(--text);}
 .badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;}
-.badge-green{background:rgba(79,255,176,.1);color:var(--accent);}
+.badge-green{background:rgba(26,102,50,.08);color:var(--pos-color);}
 .badge-blue{background:rgba(96,165,250,.1);color:var(--blue);}
-.badge-yellow{background:rgba(255,209,102,.15);color:#b07d00;}
-.badge-orange{background:rgba(201,100,66,.12);color:var(--red);}
+.badge-yellow{background:rgba(176,123,0,.1);color:#b07b00;}
+.badge-orange{background:rgba(50,104,145,.06);color:var(--red);}
 .badge-muted{background:rgba(180,170,160,.12);color:var(--muted);}
 .year-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;margin-bottom:20px;}
 .mc{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center;cursor:pointer;transition:all .15s;}
@@ -75,27 +75,27 @@ select:focus,input:focus{border-color:var(--accent);}
 .mc-name{font-size:9px;color:var(--muted);margin-bottom:3px;}
 .mc-val{font-size:13px;font-weight:500;}
 .mc-sub{font-size:9px;color:var(--muted);margin-top:2px;}
-.fx-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px;}
+.fx-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px;}
 .fx-table th{text-align:center;padding:7px 6px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid var(--border);white-space:nowrap;}
 .fx-table th.fx-cur-col{text-align:left;width:80px;}
-.fx-table td{padding:4px 4px;border-bottom:1px solid rgba(42,47,58,.3);}
+.fx-table td{padding:4px 4px;border-bottom:1px solid var(--border);}
 .fx-table tr:hover td{background:var(--surface2);}
 .fx-table td.fx-cur-cell{color:var(--accent);font-size:11px;white-space:nowrap;padding-left:6px;}
-.fx-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:4px 6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;text-align:right;outline:none;transition:border-color .15s;box-sizing:border-box;-moz-appearance:textfield;}
+.fx-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:4px 6px;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:11px;text-align:right;outline:none;transition:border-color .15s;box-sizing:border-box;-moz-appearance:textfield;}
 .fx-input:focus{border-color:var(--accent);}
 .fx-input::-webkit-outer-spin-button,.fx-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;width:800px;max-width:96vw;max-height:92vh;overflow-y:auto;}
-.modal-title{font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:20px;color:var(--accent);}
+.modal-title{font-family:'Source Serif 4',Georgia,serif;font-size:22px;margin-bottom:20px;color:var(--text);font-weight:600;letter-spacing:-0.02em;}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
 .fg{display:flex;flex-direction:column;gap:5px;}
 .fg.full{grid-column:1/-1;}
 .fl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;}
-.fi{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color .15s;}
+.fi{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:12px;outline:none;transition:border-color .15s;}
 .fi:focus{border-color:var(--accent);}
 .type-toggle{display:flex;gap:4px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px;}
-.type-toggle button{flex:1;background:none;border:none;color:var(--muted);padding:5px;border-radius:4px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;transition:all .15s;}
+.type-toggle button{flex:1;background:none;border:none;color:var(--muted);padding:5px;border-radius:4px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:11px;transition:all .15s;}
 .type-toggle button.active{background:var(--surface);color:var(--accent);}
 .modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
 .days-section{margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
@@ -104,18 +104,18 @@ select:focus,input:focus{border-color:var(--accent);}
 .days-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
 .dg{display:flex;flex-direction:column;gap:3px;}
 .dl{font-size:9px;color:var(--muted);text-align:center;}
-.di{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:5px 3px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;text-align:center;outline:none;width:100%;}
+.di{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:5px 3px;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:11px;text-align:center;outline:none;width:100%;}
 .di:focus{border-color:var(--accent);}
 .di.r{border-color:rgba(255,209,102,.25);}
 .view-toggle{display:flex;gap:3px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:2px;}
-.view-toggle button{background:none;border:none;color:var(--muted);padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;transition:all .15s;}
+.view-toggle button{background:none;border:none;color:var(--muted);padding:4px 10px;border-radius:4px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:11px;transition:all .15s;}
 .view-toggle button.active{background:var(--surface);color:var(--accent);}
 .month-strip{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:18px;}
-.ms-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:5px 10px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;transition:all .15s;white-space:nowrap;}
+.ms-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:5px 10px;border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:11px;transition:all .15s;white-space:nowrap;}
 .ms-btn:hover{color:var(--text);border-color:var(--text);}
-.ms-btn.active{background:rgba(45,106,159,.08);color:var(--accent);border-color:var(--accent);}
+.ms-btn.active{background:rgba(50,104,145,.08);color:var(--accent);border-color:var(--accent);}
 .ms-btn.all{color:var(--accent);border-color:var(--accent);}
-.ms-btn.all.active{background:rgba(45,106,159,.1);}
+.ms-btn.all.active{background:rgba(50,104,145,.08);}
 .mbar{display:flex;align-items:center;gap:6px;}
 .bar-track{flex:1;height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;}
 .bar-fill{height:100%;border-radius:2px;}
@@ -133,7 +133,8 @@ select:focus,input:focus{border-color:var(--accent);}
     <button onclick="showSection('fx',this)">Exchanges</button>
     <button onclick="showSection('invoice',this)">Invoices</button>
     <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
-      <button onclick="exportToExcel()" style="background:rgba(79,255,176,.15);color:var(--accent);border:1px solid rgba(79,255,176,.3);padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px" title="Export all tabs to Excel">⬇ Export</button>
+      <button onclick="exportToExcel()" style="background:rgba(79,255,176,.15);color:var(--accent);border:1px solid rgba(79,255,176,.3);padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px" title="Export all tabs to Excel">⬇ Export</button>
+      <button onclick="saveAppHTML()" style="background:rgba(50,104,145,.06);color:var(--accent);border:1px solid rgba(50,104,145,.4);padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:12px" title="Download app with all data baked in — use this to publish on GitHub">⬇ Save app</button>
       <button class="btn-import" onclick="document.getElementById('xl-input').click()" title="Import Excel">⬆ Import</button>
       <input type="file" id="xl-input" accept=".xlsx,.xls" style="display:none" onchange="importExcel(event)">
     </div>
@@ -1265,6 +1266,59 @@ function renderBacklog(){
 
 // NAV
 
+// ── SAVE APP AS SELF-CONTAINED HTML ──────────────────────────────────────────
+function saveAppHTML(){
+  // Get the full current HTML source
+  const src = document.documentElement.outerHTML;
+
+  // Bake in current consultants data by replacing the INIT constant
+  const consultantsJSON = JSON.stringify(consultants);
+  let out = src.replace(/const INIT=\[[\s\S]*?\];/, 'const INIT=' + consultantsJSON + ';');
+
+  // Bake in current FX rates by replacing DEFAULT_RATES
+  // Build a merged object: DEFAULT_RATES overridden by current FX values
+  const bakedRates = Object.assign({}, DEFAULT_RATES);
+  for(const cur of Object.keys(FX)){
+    // Use the January rate as the representative default (or average)
+    const jan = FX[cur]?.['January'];
+    if(jan && !isNaN(jan) && jan > 0) bakedRates[cur] = jan;
+  }
+  const ratesJSON = JSON.stringify(bakedRates);
+  out = out.replace(/const DEFAULT_RATES=\{[\s\S]*?\};/, 'const DEFAULT_RATES=' + ratesJSON + ';');
+
+  // Bake in full monthly FX so all months are correct, not just January
+  // We do this by injecting a startup script that pre-loads FX
+  const fxJSON = JSON.stringify(FX);
+  const invoiceJSON = JSON.stringify(invoiceOverrides);
+  const activeCurJSON = JSON.stringify(getActiveCurrencies());
+  const lockJSON = JSON.stringify(invoiceLocked);
+
+  const injected = `<script>
+// ── Baked-in data from Save app ──
+(function(){
+  try{
+    const bFX=${fxJSON};
+    const bInv=${invoiceJSON};
+    const bLock=${lockJSON};
+    const bCur=${activeCurJSON};
+    localStorage.setItem('forecast2026v7', JSON.stringify({c:${consultantsJSON},f:bFX}));
+    localStorage.setItem('invoiceOverrides_v2', JSON.stringify(bInv));
+    localStorage.setItem('invoiceLocked_v1', JSON.stringify(bLock));
+    localStorage.setItem('activeFXCurrencies_v1', JSON.stringify(bCur));
+  }catch(e){}
+})();
+<\/script>`;
+
+  // Inject right before </body>
+  out = out.replace('</body>', injected + '</body>');
+
+  const blob = new Blob([out], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'index.html';
+  a.click();
+}
+
 // ── EXCEL EXPORT ─────────────────────────────────────────────────────────────
 function exportToExcel(){
   const wb = XLSX.utils.book_new();
@@ -1769,14 +1823,14 @@ function renderInvoice(){
         const safeId=id.replace(/[^a-zA-Z0-9]/g,'_');
         if(!totals[r.cur]) totals[r.cur]={excl:0,incl:0};
         totals[r.cur].excl+=r.exclAmt; totals[r.cur].incl+=r.inclAmt;
-        const inpStyle = `background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:3px 6px;color:var(--text);font-size:11px;outline:none;text-align:right;width:90px;font-family:'DM Mono',monospace${locked?';opacity:.6':''}`;
+        const inpStyle = `background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:3px 6px;color:var(--text);font-size:11px;outline:none;text-align:right;width:90px;font-family:'Source Sans 3',sans-serif${locked?';opacity:.6':''}`;
         const inpTxtStyle = `background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);font-size:12px;outline:none;width:100%;padding:2px 4px`;
 
         if(r.isManual){
           // Manual line — fully editable, with delete
           const lid = r.manualId;
           const typeLabel = `<span class="badge badge-yellow" style="font-size:9px">manual</span>`;
-          const selStyle = `background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 4px;color:var(--text);font-family:'DM Mono',monospace;font-size:10px;outline:none;cursor:pointer;max-width:70px${locked?';opacity:.6;pointer-events:none':''}`;
+          const selStyle = `background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 4px;color:var(--text);font-family:'Source Sans 3',sans-serif;font-size:10px;outline:none;cursor:pointer;max-width:70px${locked?';opacity:.6;pointer-events:none':''}`;
           const revCurOpts = ALL_CURRENCIES.map(c=>`<option value="${c}"${c===r.cur?' selected':''}>${c}</option>`).join('');
           const costCurOpts = ALL_CURRENCIES.map(c=>`<option value="${c}"${c===r.costCur?' selected':''}>${c}</option>`).join('');
           const revBadgeClass = r.cur==='EUR'?'badge-green':r.cur==='HKD'?'badge-blue':'badge-yellow';
@@ -2110,22 +2164,51 @@ function parseExcelWorkbook(wb, filename) {
   const fxSheetName = sheetNames.find(s => /exchange/i.test(s));
   if (fxSheetName) {
     const wsFX = wb.Sheets[fxSheetName];
-    const fxRows = XLSX.utils.sheet_to_json(wsFX, { defval: null });
+    // Use raw array mode to handle the 2-row header structure:
+    // Row 1: "CURRENCY", description, ...
+    // Row 2: null, "Jan", "Feb", ... (actual month headers)
+    // Row 3+: currency code, values
+    const rawRows = XLSX.utils.sheet_to_json(wsFX, { header: 1, defval: null });
     let fxCount = 0;
-    for (const row of fxRows) {
-      // First column is currency code — try common header names
-      const cur = (row['CURRENCY'] || row['Currency'] || row['currency'] || Object.values(row)[0] || '').toString().trim().toUpperCase();
-      if (!cur || cur === 'EUR' || cur.length > 4) continue;
-      if (!FX[cur]) FX[cur] = {};
-      for (const m of MONTHS) {
-        const shortM = m.slice(0,3);
-        const v = parseFloat(row[shortM] ?? row[m] ?? 0);
-        if (!isNaN(v) && v > 0) { FX[cur][m] = v; fxCount++; }
+
+    // Find the row that contains month abbreviations (Jan, Feb, ...)
+    let monthRowIdx = -1;
+    let colMap = {}; // month name → column index
+    for (let ri = 0; ri < Math.min(5, rawRows.length); ri++) {
+      const row = rawRows[ri];
+      const hits = row.filter(v => v && MONTHS.some(m => m.slice(0,3).toLowerCase() === String(v).trim().toLowerCase()));
+      if (hits.length >= 6) { // found month row
+        monthRowIdx = ri;
+        row.forEach((v, ci) => {
+          if (!v) return;
+          const label = String(v).trim();
+          const match = MONTHS.find(m => m.slice(0,3).toLowerCase() === label.toLowerCase());
+          if (match) colMap[match] = ci;
+        });
+        break;
       }
     }
+
+    if (monthRowIdx >= 0) {
+      // Currency code is always in column 0 of data rows
+      for (let ri = monthRowIdx + 1; ri < rawRows.length; ri++) {
+        const row = rawRows[ri];
+        const cur = row[0] ? String(row[0]).trim().toUpperCase() : '';
+        if (!cur || cur === 'EUR' || cur.length > 4) continue;
+        if (!FX[cur]) FX[cur] = {};
+        for (const m of MONTHS) {
+          if (colMap[m] === undefined) continue;
+          const v = parseFloat(row[colMap[m]]);
+          if (!isNaN(v) && v > 0) { FX[cur][m] = v; fxCount++; }
+        }
+      }
+    }
+
     if (fxCount > 0) {
       saveData();
-      info.innerHTML += `<br>✓ Exchange Rates: ${fxRows.length} currencies loaded`;
+      info.innerHTML += `<br>✓ Exchange Rates: updated (${fxCount} values across ${Math.round(fxCount/12)} currencies)`;
+    } else {
+      info.innerHTML += `<br><span style="color:var(--yellow)">⚠ Exchange Rates sheet found but no values parsed — check format</span>`;
     }
   }
 
