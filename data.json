@@ -14,7 +14,7 @@
       "contract_end": "",
       "contract_total": 0,
       "contract_cur": "",
-      "contract_category": "Intercompany",
+      "contract_category": "Internal",
       "invoice_entity": "",
       "cost_type": "daily",
       "cost_monthly": null,
@@ -51,8 +51,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Ashi Agrawal",
@@ -104,8 +103,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Avinesha Kumar",
@@ -157,8 +155,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Chrystelle Faure",
@@ -210,8 +207,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Emilia Barreto",
@@ -226,7 +222,7 @@
       "contract_end": "",
       "contract_total": 0,
       "contract_cur": "",
-      "contract_category": "Intercompany",
+      "contract_category": "Internal",
       "invoice_entity": "",
       "cost_type": "daily",
       "cost_monthly": null,
@@ -263,8 +259,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Estella Guan",
@@ -316,8 +311,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Feifei Yan",
@@ -369,8 +363,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Ferdinand Garcia",
@@ -422,8 +415,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Harshit Chaudhary",
@@ -475,8 +467,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Indhu Karpagakunjalam",
@@ -528,8 +519,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Jeeva",
@@ -581,8 +571,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Jonathan Ling",
@@ -634,8 +623,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Marcos Coelho",
@@ -650,7 +638,7 @@
       "contract_end": "",
       "contract_total": 0,
       "contract_cur": "",
-      "contract_category": "Intercompany",
+      "contract_category": "Internal",
       "invoice_entity": "",
       "cost_type": "daily",
       "cost_monthly": null,
@@ -687,8 +675,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Naga Jagadish Gupta",
@@ -740,8 +727,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Nursyahilla Syaszuanis Mahmood",
@@ -793,8 +779,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Ponniah Kannan",
@@ -846,8 +831,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Rohin Prasanth",
@@ -899,8 +883,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Saumya Agrawal",
@@ -952,8 +935,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Sitarai Qaisara",
@@ -1005,8 +987,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Smita Kalunge",
@@ -1058,8 +1039,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Someya Singh",
@@ -1111,8 +1091,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Thai Phan",
@@ -1164,8 +1143,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Udhaya Rathinavel",
@@ -1217,8 +1195,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Waikei Lau",
@@ -1270,8 +1247,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Youssef Elkarmi",
@@ -1286,7 +1262,7 @@
       "contract_end": "",
       "contract_total": 0,
       "contract_cur": "",
-      "contract_category": "Intercompany",
+      "contract_category": "Internal",
       "invoice_entity": "",
       "cost_type": "daily",
       "cost_monthly": null,
@@ -1323,8 +1299,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Zosimo Pascua",
@@ -1376,8 +1351,7 @@
         "October": 0,
         "November": 0,
         "December": 0
-      },
-      "contract_type": "Time & Material"
+      }
     },
     {
       "name": "Louis Vuitton",
